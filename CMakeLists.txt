@@ -11,6 +11,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(BUILD_TESTS "Build tests" NO)
 
+option(PY_BUILD "Build shared library for use with Python" NO)
+
 if(PROJECT_IS_TOP_LEVEL)
     include(Sanitizers.cmake)
 endif()
@@ -40,7 +42,17 @@ else()
 endif()
 
 set(NSFD_SOURCES src/nsfd_field.c)
-add_library(nsfd ${NSFD_SOURCES})
+
+if(PY_BUILD)
+    find_package(Python COMPONENTS Development REQUIRED)
+    add_compile_definitions(PY_BUILD)
+    add_library(nsfd SHARED ${NSFD_SOURCES})
+    set_target_properties(nsfd PROPERTIES OUTPUT_NAME "nsfd.pymem")
+    target_link_libraries(nsfd PRIVATE Python::Python)
+    install(TARGETS nsfd DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/nsfd)
+else()
+    add_library(nsfd ${NSFD_SOURCES})
+endif()
 
 target_sources(nsfd
     PUBLIC
@@ -49,8 +61,6 @@ target_sources(nsfd
     BASE_DIRS include
     FILES include/nsfd.h
 )
-
-message(STATUS "TEST_ENV=${TEST_ENV}")
 
 if(BUILD_TESTS)
     add_executable(nsfd_field.test src/nsfd_field.test.cpp)

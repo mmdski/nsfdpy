@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["NSFD"],
+  "cSpell.words": ["Domanski", "libnsfd", "NSFD", "pymem"],
   "cmake.configureSettings": {
     "BUILD_TESTS": true,
     "INSTALL_GTEST": false,

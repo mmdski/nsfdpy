@@ -97,7 +97,7 @@ nsfd_s_field_value (NSFDScalarField *s_field_p, size_t i, size_t j)
 }
 
 void
-nsfd_s_field_get_field (NSFDScalarField *s_field_p, NSFDReal *field)
+nsfd_s_field_get_values (NSFDScalarField *s_field_p, NSFDReal *field)
 {
   assert (s_field_p);
   assert (field);

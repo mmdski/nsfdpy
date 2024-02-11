@@ -23,7 +23,7 @@ void nsfd_s_field_init_grid (NSFDScalarField *s_field_p,
                              NSFDReal         x_max,
                              NSFDReal         y_min,
                              NSFDReal         y_max);
-void nsfd_s_field_get_field (NSFDScalarField *s_field_p, NSFDReal *field);
+void nsfd_s_field_get_values (NSFDScalarField *s_field_p, NSFDReal *field);
 void nsfd_s_field_get_grid (NSFDScalarField *s_field_p,
                             NSFDReal        *grid_x,
                             NSFDReal        *grid_y);

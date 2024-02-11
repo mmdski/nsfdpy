@@ -53,7 +53,7 @@ TEST (NSFDScalarField, init_const)
 
   NSFDReal *field = new NSFDReal[m_rows * n_cols];
 
-  nsfd_s_field_get_field (s_field_p, field);
+  nsfd_s_field_get_values (s_field_p, field);
 
   for (size_t i = 0; i < m_rows * n_cols; ++i)
     {
