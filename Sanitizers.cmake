@@ -10,7 +10,6 @@ if(MSVC)
         )
         add_compile_options(
             /fsanitize=address
-            /fsanitize-address-use-after-return
         )
     endif()
 elseif(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
