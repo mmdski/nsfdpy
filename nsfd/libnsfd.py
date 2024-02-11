@@ -7,6 +7,8 @@ if platform.system() == "Windows":
     _nsfd_lib_path = os.path.join(_file_path, "nsfd.pymem.dll")
 elif platform.system() == "Darwin":
     _nsfd_lib_path = os.path.join(_file_path, "libnsfd.pymem.dylib")
+elif platform.system() == "Linux":
+    _nsfd_lib_path = os.path.join(_file_path, "libnsfd.pymem.so")
 
 _nsfd_lib = CDLL(_nsfd_lib_path)
 
