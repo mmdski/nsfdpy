@@ -1,0 +1,60 @@
+cmake_minimum_required(VERSION 3.23)
+project(nsfd VERSION 0.1.0 LANGUAGES C CXX)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED True)
+set(CMAKE_C_EXTENSIONS OFF)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+option(BUILD_TESTS "Build tests" NO)
+
+if(PROJECT_IS_TOP_LEVEL)
+    include(Sanitizers.cmake)
+endif()
+
+include(FetchContent)
+
+if(BUILD_TESTS)
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.14.0
+    )
+
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+    enable_testing()
+    include(GoogleTest)
+endif()
+
+if(MSVC)
+    # /wd6326 "Potential comparison of a constant with another constant."
+    # /wd4200 "nonstandard extension used: zero-sized array in struct/union"
+    add_compile_options(/guard:cf /analyze /permissive- /W4 /WX /wd6326 /wd4200)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
+
+set(NSFD_SOURCES src/nsfd_field.c)
+add_library(nsfd ${NSFD_SOURCES})
+
+target_sources(nsfd
+    PUBLIC
+    FILE_SET api
+    TYPE HEADERS
+    BASE_DIRS include
+    FILES include/nsfd.h
+)
+
+message(STATUS "TEST_ENV=${TEST_ENV}")
+
+if(BUILD_TESTS)
+    add_executable(nsfd_field.test src/nsfd_field.test.cpp)
+    target_link_libraries(nsfd_field.test nsfd GTest::gtest GTest::gtest_main)
+    gtest_add_tests(TARGET nsfd_field.test TEST_LIST nsfd_field.test-list)
+    set_tests_properties(${nsfd_field.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+endif()
