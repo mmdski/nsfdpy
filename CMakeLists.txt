@@ -41,7 +41,7 @@ else()
     add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
-set(NSFD_SOURCES src/nsfd_field.c)
+set(NSFD_SOURCES src/nsfd.c src/nsfd_field.c)
 
 if(PY_BUILD)
     find_package(Python COMPONENTS Development REQUIRED)

@@ -13,6 +13,7 @@ typedef struct
 
 typedef struct NSFDScalarField NSFDScalarField;
 
+size_t           nsfd_sizeof_real (void);
 NSFDScalarField *nsfd_s_field_new (size_t m_rows, size_t n_cols);
 void             nsfd_s_field_free (NSFDScalarField **s_field_pp);
 NSFDGridShape    nsfd_s_field_shape (NSFDScalarField *s_field_p);

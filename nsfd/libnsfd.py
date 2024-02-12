@@ -1,4 +1,4 @@
-from ctypes import c_double, c_size_t, CDLL, POINTER, Structure, pointer
+from ctypes import c_double, c_float, c_size_t, CDLL, POINTER, Structure, pointer
 import os
 import platform
 
@@ -12,7 +12,15 @@ elif platform.system() == "Linux":
 
 _nsfd_lib = CDLL(_nsfd_lib_path)
 
-Real = c_double
+nsfd_sizeof_real = _nsfd_lib.nsfd_sizeof_real
+nsfd_sizeof_real.restype = c_size_t
+nsfd_sizeof_real.argtypes = None
+
+if nsfd_sizeof_real() == 8:
+    Real = c_double
+elif nsfd_sizeof_real() == 4:
+    Real = c_float
+
 Real_p = POINTER(Real)
 
 
