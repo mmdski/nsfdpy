@@ -18,5 +18,6 @@
     "ENABLE_LSAN": true,
     "ENABLE_UBSAN": true
   },
-  "C_Cpp.codeAnalysis.clangTidy.enabled": true
+  "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+  "notebook.lineNumbers": "on"
 }
