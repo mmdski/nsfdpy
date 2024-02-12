@@ -17,19 +17,13 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     option(ENABLE_TSAN "Enable ThreadSanitizer" NO)
     option(ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer" NO)
 
-    if(NOT APPLE)
-        option(ENABLE_MSAN "Enable MemorySanitizer" NO)
-    endif()
-
-    if((ENABLE_ASAN AND(ENABLE_TSAN OR ENABLE_MSAN)) OR
-        (ENABLE_LSAN AND(ENABLE_TSAN OR ENABLE_MSAN)) OR
-        (ENABLE_TSAN AND ENABLE_MSAN))
+    if((ENABLE_ASAN AND ENABLE_TSAN) OR
+        (ENABLE_LSAN AND ENABLE_TSAN))
         message(FATAL_ERROR
             "Invalid sanitizer combination:\n"
             "  ENABLE_ASAN:  ${ENABLE_ASAN}\n"
             "  ENABLE_LSAN:  ${ENABLE_LSAN}\n"
             "  ENABLE_TSAN:  ${ENABLE_TSAN}\n"
-            "  ENABLE_MSAN:  ${ENABLE_MSAN}"
         )
     endif()
 
@@ -37,14 +31,12 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
         -fno-omit-frame-pointer
         $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address>
         $<$<BOOL:${ENABLE_LSAN}>:-fsanitize=leak>
-        $<$<BOOL:${ENABLE_MSAN}>:-fsanitize=memory>
         $<$<BOOL:${ENABLE_TSAN}>:-fsanitize=thread>
         $<$<BOOL:${ENABLE_UBSAN}>:-fsanitize=undefined>
     )
     add_link_options(
         $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address>
         $<$<BOOL:${ENABLE_LSAN}>:-fsanitize=leak>
-        $<$<BOOL:${ENABLE_MSAN}>:-fsanitize=memory>
         $<$<BOOL:${ENABLE_TSAN}>:-fsanitize=thread>
         $<$<BOOL:${ENABLE_UBSAN}>:-fsanitize=undefined>
     )
