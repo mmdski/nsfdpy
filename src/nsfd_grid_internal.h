@@ -1,5 +1,5 @@
-#ifndef NSFD_FIELD_INTERNAL_H_
-#define NSFD_FIELD_INTERNAL_H_
+#ifndef NSFD_GRID_INTERNAL_H_
+#define NSFD_GRID_INTERNAL_H_
 
 #include <stddef.h>
 
@@ -18,12 +18,12 @@ typedef struct
 {
   NSFDGridCoord coord;
   NSFDReal      s;
-} NSFDFieldSValue;
+} NSFDGridValue;
 
-struct NSFDScalarField
+struct NSFDGrid
 {
-  NSFDGridShape   shape;
-  NSFDFieldSValue values[];
+  NSFDGridShape shape;
+  NSFDGridValue values[];
 };
 
 #endif

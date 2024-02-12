@@ -24,43 +24,43 @@ elif nsfd_sizeof_real() == 4:
 Real_p = POINTER(Real)
 
 
-class GridShape(Structure):
+class NSFDGridShape(Structure):
     _fields_ = [("m_rows", c_size_t), ("n_cols", c_size_t)]
 
 
-class ScalarField(Structure):
+class NSFDGrid(Structure):
     pass
 
 
-ScalarFieldPtr = POINTER(ScalarField)
+NSFDGridPtr = POINTER(NSFDGrid)
 
-s_field_new = _nsfd_lib.nsfd_s_field_new
-s_field_new.restype = ScalarFieldPtr
-s_field_new.argtypes = [c_size_t, c_size_t]
+grid_new = _nsfd_lib.nsfd_grid_new
+grid_new.restype = NSFDGridPtr
+grid_new.argtypes = [c_size_t, c_size_t]
 
-s_field_free = _nsfd_lib.nsfd_s_field_free
-s_field_free.restype = None
-s_field_free.argtypes = [POINTER(ScalarFieldPtr)]
+grid_free = _nsfd_lib.nsfd_grid_free
+grid_free.restype = None
+grid_free.argtypes = [POINTER(NSFDGridPtr)]
 
-s_field_shape = _nsfd_lib.nsfd_s_field_shape
-s_field_shape.restype = GridShape
-s_field_shape.argtypes = [ScalarFieldPtr]
+grid_shape = _nsfd_lib.nsfd_grid_shape
+grid_shape.restype = NSFDGridShape
+grid_shape.argtypes = [NSFDGridPtr]
 
-s_field_init_const = _nsfd_lib.nsfd_s_field_init_const
-s_field_init_const.restype = None
-s_field_init_const.argtypes = [ScalarFieldPtr, Real]
+grid_init_const = _nsfd_lib.nsfd_grid_init_const
+grid_init_const.restype = None
+grid_init_const.argtypes = [NSFDGridPtr, Real]
 
-s_field_init_grid = _nsfd_lib.nsfd_s_field_init_grid
-s_field_init_grid.restype = None
-s_field_init_grid.argtypes = [ScalarFieldPtr, Real, Real, Real, Real]
+grid_init_grid = _nsfd_lib.nsfd_grid_init_grid
+grid_init_grid.restype = None
+grid_init_grid.argtypes = [NSFDGridPtr, Real, Real, Real, Real]
 
-s_field_get_values = _nsfd_lib.nsfd_s_field_get_values
-s_field_get_values.restype = None
-s_field_get_values.argtypes = [ScalarFieldPtr, Real_p]
+grid_get_values = _nsfd_lib.nsfd_grid_get_values
+grid_get_values.restype = None
+grid_get_values.argtypes = [NSFDGridPtr, Real_p]
 
-s_field_get_grid = _nsfd_lib.nsfd_s_field_get_grid
-s_field_get_grid.restype = None
-s_field_get_grid.argtypes = [ScalarFieldPtr, Real_p, Real_p]
+grid_get_coords = _nsfd_lib.nsfd_grid_get_coords
+grid_get_coords.restype = None
+grid_get_coords.argtypes = [NSFDGridPtr, Real_p, Real_p]
 
 if __name__ == "__main__":
     import numpy as np
@@ -81,19 +81,17 @@ if __name__ == "__main__":
     field_y_min = y_min + dy / 2
     field_y_max = y_max - dy / 2
 
-    p_ptr = s_field_new(m_rows, n_cols)
+    p_ptr = grid_new(m_rows, n_cols)
 
-    s_field_init_const(p_ptr, Real(1))
-    s_field_init_grid(p_ptr, x_min, x_max, y_min, y_max)
+    grid_init_const(p_ptr, Real(1))
+    grid_init_grid(p_ptr, x_min, x_max, y_min, y_max)
 
-    field_shape = s_field_shape(p_ptr)
+    field_shape = grid_shape(p_ptr)
     p_values = np.empty((field_shape.m_rows, field_shape.n_cols))
     x_grid = np.empty_like(p_values)
     y_grid = np.empty_like(p_values)
 
-    s_field_get_values(p_ptr, p_values.ctypes.data_as(Real_p))
-    s_field_get_grid(
-        p_ptr, x_grid.ctypes.data_as(Real_p), y_grid.ctypes.data_as(Real_p)
-    )
+    grid_get_values(p_ptr, p_values.ctypes.data_as(Real_p))
+    grid_get_coords(p_ptr, x_grid.ctypes.data_as(Real_p), y_grid.ctypes.data_as(Real_p))
 
-    s_field_free(pointer(p_ptr))
+    grid_free(pointer(p_ptr))

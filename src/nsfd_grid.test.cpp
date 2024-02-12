@@ -9,51 +9,51 @@ extern "C"
 
 namespace
 {
-TEST (NSFDScalarField, new)
+TEST (NSFDGrid, new)
 {
-  size_t           m_rows    = 10;
-  size_t           n_cols    = 10;
-  NSFDScalarField *s_field_p = nsfd_s_field_new (m_rows, n_cols);
+  size_t    m_rows = 10;
+  size_t    n_cols = 10;
+  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
 
-  nsfd_s_field_free (&s_field_p);
-  ASSERT_FALSE (s_field_p);
+  nsfd_grid_free (&grid_p);
+  ASSERT_FALSE (grid_p);
 }
 
-TEST (NSFDScalarField, shape)
+TEST (NSFDGrid, shape)
 {
-  size_t           m_rows      = 10;
-  size_t           n_cols      = 10;
-  NSFDScalarField *s_field_p   = nsfd_s_field_new (m_rows, n_cols);
-  NSFDGridShape    field_shape = nsfd_s_field_shape (s_field_p);
+  size_t        m_rows      = 10;
+  size_t        n_cols      = 10;
+  NSFDGrid     *grid_p      = nsfd_grid_new (m_rows, n_cols);
+  NSFDGridShape field_shape = nsfd_grid_shape (grid_p);
 
   ASSERT_EQ (field_shape.m_rows, m_rows);
   ASSERT_EQ (field_shape.n_cols, n_cols);
-  nsfd_s_field_free (&s_field_p);
+  nsfd_grid_free (&grid_p);
 }
 
-TEST (NSFDScalarField, size)
+TEST (NSFDGrid, size)
 {
-  size_t           m_rows    = 10;
-  size_t           n_cols    = 10;
-  NSFDScalarField *s_field_p = nsfd_s_field_new (m_rows, n_cols);
-  size_t           size      = nsfd_s_field_size (s_field_p);
+  size_t    m_rows = 10;
+  size_t    n_cols = 10;
+  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
+  size_t    size   = nsfd_grid_size (grid_p);
 
   ASSERT_EQ (size, m_rows * n_cols);
-  nsfd_s_field_free (&s_field_p);
+  nsfd_grid_free (&grid_p);
 }
 
-TEST (NSFDScalarField, init_const)
+TEST (NSFDGrid, init_const)
 {
-  size_t           m_rows    = 10;
-  size_t           n_cols    = 10;
-  NSFDScalarField *s_field_p = nsfd_s_field_new (m_rows, n_cols);
+  size_t    m_rows = 10;
+  size_t    n_cols = 10;
+  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
 
   NSFDReal const_field_value = 1;
-  nsfd_s_field_init_const (s_field_p, const_field_value);
+  nsfd_grid_init_const (grid_p, const_field_value);
 
   NSFDReal *field = new NSFDReal[m_rows * n_cols];
 
-  nsfd_s_field_get_values (s_field_p, field);
+  nsfd_grid_get_values (grid_p, field);
 
   for (size_t i = 0; i < m_rows * n_cols; ++i)
     {
@@ -61,14 +61,14 @@ TEST (NSFDScalarField, init_const)
     }
 
   delete[] field;
-  nsfd_s_field_free (&s_field_p);
+  nsfd_grid_free (&grid_p);
 }
 
-TEST (NSFDScalarField, init_grid)
+TEST (NSFDGrid, init_grid)
 {
-  size_t           m_rows    = 11;
-  size_t           n_cols    = 11;
-  NSFDScalarField *s_field_p = nsfd_s_field_new (m_rows, n_cols);
+  size_t    m_rows = 11;
+  size_t    n_cols = 11;
+  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
 
   NSFDReal x_min = -5, x_max = 5;
   NSFDReal y_min = 0, y_max = 10;
@@ -91,11 +91,11 @@ TEST (NSFDScalarField, init_grid)
       x_arr[j] = x_min + dx * j;
     }
 
-  nsfd_s_field_init_grid (s_field_p, x_min, x_max, y_min, y_max);
+  nsfd_grid_init_grid (grid_p, x_min, x_max, y_min, y_max);
 
   NSFDReal *grid_x = new NSFDReal[m_rows * n_cols];
   NSFDReal *grid_y = new NSFDReal[m_rows * n_cols];
-  nsfd_s_field_get_grid (s_field_p, grid_x, grid_y);
+  nsfd_grid_get_coords (grid_p, grid_x, grid_y);
 
   size_t grid_idx;
 
@@ -113,7 +113,7 @@ TEST (NSFDScalarField, init_grid)
   delete[] x_arr;
   delete[] grid_y;
   delete[] grid_x;
-  nsfd_s_field_free (&s_field_p);
+  nsfd_grid_free (&grid_p);
 }
 
 }

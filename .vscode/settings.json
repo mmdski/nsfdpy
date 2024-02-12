@@ -1,5 +1,15 @@
 {
-  "cSpell.words": ["Domanski", "libnsfd", "NSFD", "pymem"],
+  "cSpell.words": [
+    "Domanski",
+    "figsize",
+    "hlines",
+    "libnsfd",
+    "linestyles",
+    "linewidth",
+    "NSFD",
+    "pymem",
+    "vlines"
+  ],
   "cmake.configureSettings": {
     "BUILD_TESTS": true,
     "INSTALL_GTEST": false,

@@ -41,7 +41,7 @@ else()
     add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
-set(NSFD_SOURCES src/nsfd.c src/nsfd_field.c)
+set(NSFD_SOURCES src/nsfd.c src/nsfd_grid.c)
 
 if(PY_BUILD)
     find_package(Python COMPONENTS Development REQUIRED)
@@ -67,8 +67,8 @@ target_sources(nsfd
 )
 
 if(BUILD_TESTS)
-    add_executable(nsfd_field.test src/nsfd_field.test.cpp)
-    target_link_libraries(nsfd_field.test nsfd GTest::gtest GTest::gtest_main)
-    gtest_add_tests(TARGET nsfd_field.test TEST_LIST nsfd_field.test-list)
-    set_tests_properties(${nsfd_field.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+    add_executable(nsfd_grid.test src/nsfd_grid.test.cpp)
+    target_link_libraries(nsfd_grid.test nsfd GTest::gtest GTest::gtest_main)
+    gtest_add_tests(TARGET nsfd_grid.test TEST_LIST nsfd_grid.test-list)
+    set_tests_properties(${nsfd_grid.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
 endif()
