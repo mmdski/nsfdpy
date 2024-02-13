@@ -3,6 +3,8 @@
     "Domanski",
     "figsize",
     "hlines",
+    "imax",
+    "jmax",
     "libnsfd",
     "linestyles",
     "linewidth",
@@ -19,5 +21,6 @@
     "ENABLE_UBSAN": true
   },
   "C_Cpp.codeAnalysis.clangTidy.enabled": true,
-  "notebook.lineNumbers": "on"
+  "notebook.lineNumbers": "on",
+  "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
 }
