@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
-#define GRID_INDEX(n_cols, row, col) (row * n_cols + col)
+// #define GRID_INDEX(jmax, i, j) (j * (imax + 2) + j)
+#define GRID_INDEX(imax, i, j) (j * (imax + 2) + i)
 
 extern "C"
 {
@@ -9,113 +10,100 @@ extern "C"
 
 namespace
 {
-TEST (NSFDGrid, new)
-{
-  size_t    m_rows = 10;
-  size_t    n_cols = 10;
-  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
 
-  nsfd_grid_free (&grid_p);
-  ASSERT_FALSE (grid_p);
+TEST (NSFDGridGeom, new)
+{
+  NSFDGridGeomData geom_data   = { 10, 10, 100, 100 };
+  NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
+  nsfd_grid_geom_free (&grid_geom_p);
 }
 
-TEST (NSFDGrid, shape)
+TEST (NSFDGridGeom, init_p)
 {
-  size_t        m_rows      = 10;
-  size_t        n_cols      = 10;
-  NSFDGrid     *grid_p      = nsfd_grid_new (m_rows, n_cols);
-  NSFDGridShape field_shape = nsfd_grid_shape (grid_p);
-
-  ASSERT_EQ (field_shape.m_rows, m_rows);
-  ASSERT_EQ (field_shape.n_cols, n_cols);
-  nsfd_grid_free (&grid_p);
+  NSFDGridGeomData geom_data   = { 10, 10, 100, 100 };
+  NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
+  nsfd_grid_geom_init_p (grid_geom_p);
+  nsfd_grid_geom_free (&grid_geom_p);
+  ASSERT_EQ ((long) grid_geom_p, NULL);
 }
 
-TEST (NSFDGrid, size)
+TEST (NSFDGridGeom, init_u)
 {
-  size_t    m_rows = 10;
-  size_t    n_cols = 10;
-  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
-  size_t    size   = nsfd_grid_size (grid_p);
-
-  ASSERT_EQ (size, m_rows * n_cols);
-  nsfd_grid_free (&grid_p);
+  NSFDGridGeomData geom_data   = { 10, 10, 100, 100 };
+  NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
+  nsfd_grid_geom_init_u (grid_geom_p);
+  nsfd_grid_geom_free (&grid_geom_p);
+  ASSERT_EQ ((long) grid_geom_p, NULL);
 }
 
-TEST (NSFDGrid, init_const)
+TEST (NSFDGridGeom, init_v)
 {
-  size_t    m_rows = 10;
-  size_t    n_cols = 10;
-  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
-
-  NSFDReal const_field_value = 1;
-  nsfd_grid_init_const (grid_p, const_field_value);
-
-  NSFDReal *field = new NSFDReal[m_rows * n_cols];
-
-  nsfd_grid_get_values (grid_p, field);
-
-  for (size_t i = 0; i < m_rows * n_cols; ++i)
-    {
-      ASSERT_EQ (field[i], const_field_value);
-    }
-
-  delete[] field;
-  nsfd_grid_free (&grid_p);
+  NSFDGridGeomData geom_data   = { 10, 10, 100, 100 };
+  NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
+  nsfd_grid_geom_init_v (grid_geom_p);
+  nsfd_grid_geom_free (&grid_geom_p);
+  ASSERT_EQ ((long) grid_geom_p, NULL);
 }
 
-TEST (NSFDGrid, init_grid)
+TEST (NSFDGridGeom, n_cells)
 {
-  size_t    m_rows = 11;
-  size_t    n_cols = 11;
-  NSFDGrid *grid_p = nsfd_grid_new (m_rows, n_cols);
-
-  NSFDReal x_min = -5, x_max = 5;
-  NSFDReal y_min = 0, y_max = 10;
-  NSFDReal x_range = x_max - x_min;
-  NSFDReal y_range = y_max - y_min;
-
-  NSFDReal dx = x_range / (n_cols - 1);
-  NSFDReal dy = y_range / (m_rows - 1);
-
-  NSFDReal *x_arr = new NSFDReal[m_rows * n_cols];
-  NSFDReal *y_arr = new NSFDReal[m_rows * n_cols];
-
-  for (size_t i = 0; i < m_rows; ++i)
-    {
-      y_arr[i] = y_max - dy * i;
-    }
-
-  for (size_t j = 0; j < n_cols; ++j)
-    {
-      x_arr[j] = x_min + dx * j;
-    }
-
-  nsfd_grid_init_grid (grid_p, x_min, x_max, y_min, y_max);
-
-  NSFDReal *grid_x = new NSFDReal[m_rows * n_cols];
-  NSFDReal *grid_y = new NSFDReal[m_rows * n_cols];
-  nsfd_grid_get_coords (grid_p, grid_x, grid_y);
-
-  size_t grid_idx;
-
-  for (size_t i = 0; i < m_rows; i++)
-    {
-      for (size_t j = 0; j < n_cols; j++)
-        {
-          grid_idx = GRID_INDEX (n_cols, i, j);
-          ASSERT_EQ (x_arr[j], grid_x[grid_idx]);
-          ASSERT_EQ (y_arr[i], grid_y[grid_idx]);
-        }
-    }
-
-  delete[] y_arr;
-  delete[] x_arr;
-  delete[] grid_y;
-  delete[] grid_x;
-  nsfd_grid_free (&grid_p);
+  size_t           imax        = 10;
+  size_t           jmax        = 15;
+  NSFDGridGeomData geom_data   = { imax, jmax, 100, 100 };
+  NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
+  nsfd_grid_geom_init_p (grid_geom_p);
+  size_t n_cells = nsfd_grid_geom_n_cells (grid_geom_p);
+  ASSERT_EQ (n_cells, (imax + 2) * (jmax + 2));
+  nsfd_grid_geom_free (&grid_geom_p);
 }
 
+TEST (NSFDGridGeom, coords)
+{
+  size_t           imax        = 10;
+  size_t           jmax        = 15;
+  NSFDGridGeomData geom_data   = { imax, jmax, 100, 100 };
+  NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
+  nsfd_grid_geom_init_p (grid_geom_p);
+
+  size_t    n_cells  = nsfd_grid_geom_n_cells (grid_geom_p);
+  NSFDReal *x_coords = new NSFDReal[n_cells];
+  NSFDReal *y_coords = new NSFDReal[n_cells];
+
+  // just checking for memory issues for now
+  nsfd_grid_geom_coords (grid_geom_p, x_coords, y_coords);
+
+  delete[] x_coords;
+  delete[] y_coords;
+  nsfd_grid_geom_free (&grid_geom_p);
+}
+
+TEST (NSFDGridValues, new)
+{
+  NSFDGridGeomData geom_data     = { 10, 15, 100, 200 };
+  NSFDGridValues  *grid_values_p = nsfd_grid_values_new (&geom_data);
+  nsfd_grid_values_free (&grid_values_p);
+}
+
+TEST (NSFDGridValues, init)
+{
+  size_t           imax          = 10;
+  size_t           jmax          = 15;
+  NSFDGridGeomData geom_data     = { imax, jmax, 100, 100 };
+  NSFDGridValues  *grid_values_p = nsfd_grid_values_new (&geom_data);
+  nsfd_grid_values_init (grid_values_p, 10);
+  nsfd_grid_values_free (&grid_values_p);
+}
+
+TEST (NSFDGridValues, n_cells)
+{
+  size_t           imax          = 10;
+  size_t           jmax          = 15;
+  NSFDGridGeomData geom_data     = { imax, jmax, 100, 100 };
+  NSFDGridValues  *grid_values_p = nsfd_grid_values_new (&geom_data);
+  size_t           n_cells       = nsfd_grid_values_n_cells (grid_values_p);
+  ASSERT_EQ (n_cells, (imax + 2) * (jmax + 2));
+  nsfd_grid_values_free (&grid_values_p);
+}
 }
 
 int

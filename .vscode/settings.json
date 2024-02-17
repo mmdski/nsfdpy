@@ -1,16 +1,25 @@
 {
   "cSpell.words": [
+    "delx",
+    "dely",
     "Domanski",
+    "dtype",
+    "facecolor",
     "figsize",
     "hlines",
     "imax",
     "jmax",
     "libnsfd",
     "linestyles",
+    "LINETO",
     "linewidth",
+    "mpatches",
+    "mpath",
     "NSFD",
     "pymem",
-    "vlines"
+    "vlines",
+    "xlength",
+    "ylength"
   ],
   "cmake.configureSettings": {
     "BUILD_TESTS": true,

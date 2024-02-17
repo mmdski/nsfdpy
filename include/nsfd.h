@@ -5,27 +5,33 @@
 
 typedef double NSFDReal;
 
+size_t nsfd_sizeof_real (void);
+
 typedef struct
 {
-  size_t m_rows;
-  size_t n_cols;
-} NSFDGridShape;
+  size_t   imax;
+  size_t   jmax;
+  NSFDReal xlength;
+  NSFDReal ylength;
+} NSFDGridGeomData;
 
-typedef struct NSFDGrid NSFDGrid;
+typedef struct NSFDGridGeom NSFDGridGeom;
 
-size_t        nsfd_sizeof_real (void);
-NSFDGrid     *nsfd_grid_new (size_t m_rows, size_t n_cols);
-void          nsfd_grid_free (NSFDGrid **grid_pp);
-NSFDGridShape nsfd_grid_shape (NSFDGrid *grid_p);
-size_t        nsfd_grid_size (NSFDGrid *grid_p);
-void          nsfd_grid_init_const (NSFDGrid *grid_p, NSFDReal c);
-void          nsfd_grid_init_grid (NSFDGrid *grid_p,
-                                   NSFDReal  x_min,
-                                   NSFDReal  x_max,
-                                   NSFDReal  y_min,
-                                   NSFDReal  y_max);
-void          nsfd_grid_get_values (NSFDGrid *grid_p, NSFDReal *field);
+NSFDGridGeom *nsfd_grid_geom_new (NSFDGridGeomData *geom_data_p);
+void          nsfd_grid_geom_free (NSFDGridGeom **grid_geom_pp);
+size_t        nsfd_grid_geom_n_cells (NSFDGridGeom *grid_geom_p);
+void          nsfd_grid_geom_init_p (NSFDGridGeom *grid_geom_p);
+void          nsfd_grid_geom_init_u (NSFDGridGeom *grid_geom_p);
+void          nsfd_grid_geom_init_v (NSFDGridGeom *grid_geom_p);
 void
-nsfd_grid_get_coords (NSFDGrid *grid_p, NSFDReal *grid_x, NSFDReal *grid_y);
+nsfd_grid_geom_coords (NSFDGridGeom *grid_geom_p, NSFDReal *x, NSFDReal *y);
 
+typedef struct NSFDGridValues NSFDGridValues;
+
+NSFDGridValues *nsfd_grid_values_new (NSFDGridGeomData *geom_data_p);
+void            nsfd_grid_values_free (NSFDGridValues **grid_values_p);
+size_t          nsfd_grid_values_n_cells (NSFDGridValues *grid_values_p);
+void            nsfd_grid_values_init (NSFDGridValues *grid_values_p,
+                                       NSFDReal        init_values);
+void nsfd_grid_values (NSFDGridValues *grid_values_p, NSFDReal *values);
 #endif
