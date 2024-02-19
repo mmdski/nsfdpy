@@ -3,6 +3,8 @@
 
 #include <float.h>
 #include <limits.h>
+#include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,6 +15,9 @@
 
 // calculate grid index
 #define NSFD_GRID_INDEX(imax, i, j) (j * (imax + N_B_CELLS) + i)
+
+#define nsfd_real_abs(x) fabs (x)
+#define nsfd_real_min(x, y) fmin (x, y)
 
 typedef struct
 {
@@ -77,6 +82,20 @@ nsfd_size_t_to_real (size_t s, const char *file, int line)
     }
 
   return (NSFDReal) s;
+}
+
+static inline bool
+nsfd_grid_geom_data_eq (NSFDGridGeomData *a_p, NSFDGridGeomData *b_p)
+{
+  if (!a_p || !b_p)
+    return false;
+  if (a_p == b_p)
+    return true;
+  if (a_p->imax != b_p->imax || a_p->jmax != b_p->jmax)
+    return false;
+  if (a_p->xlength != b_p->xlength || a_p->ylength != b_p->ylength)
+    return false;
+  return true;
 }
 
 #endif

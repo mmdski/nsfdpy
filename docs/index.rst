@@ -11,7 +11,8 @@ Code for *Numerical Simulation in Fluid Dynamics*
    :caption: Contents:
 
    parameters.rst
-
+   c-api.rst
+   equations.rst
 
 
 .. Indices and tables

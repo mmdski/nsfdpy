@@ -7,12 +7,32 @@
 #include "nsfd_internal.h"
 #include "nsfd_mem.h"
 
+NSFDReal
+nsfd_grid_values_abs_max (NSFDGridValues *values_p)
+{
+  assert (values_p);
+
+  NSFDReal abs_max = 0;
+  NSFDReal abs_value;
+
+  size_t n_cells = nsfd_grid_values_n_cells (values_p);
+
+  for (size_t i = 0; i < n_cells; ++i)
+    {
+      abs_value = nsfd_real_abs (values_p->values[i]);
+      if (abs_value > abs_max)
+        abs_max = abs_value;
+    }
+
+  return abs_max;
+}
+
 NSFDGridGeom *
 nsfd_grid_geom_new (NSFDGridGeomData *geom_data_p)
 {
   assert (geom_data_p);
-  assert (geom_data_p->imax > 0 && geom_data_p->jmax);
-  assert (geom_data_p->xlength > 0 && geom_data_p->xlength);
+  assert (geom_data_p->imax > 0 && geom_data_p->jmax > 0);
+  assert (geom_data_p->xlength > 0 && geom_data_p->xlength > 0);
 
   size_t n_cells = nsfd_size_t_mult (geom_data_p->imax + N_B_CELLS,
                                      geom_data_p->jmax + N_B_CELLS,
