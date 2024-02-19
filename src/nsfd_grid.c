@@ -32,7 +32,7 @@ nsfd_grid_geom_new (NSFDGridGeomData *geom_data_p)
 {
   assert (geom_data_p);
   assert (geom_data_p->imax > 0 && geom_data_p->jmax > 0);
-  assert (geom_data_p->xlength > 0 && geom_data_p->xlength > 0);
+  assert (geom_data_p->xlength > 0 && geom_data_p->ylength > 0);
 
   size_t n_cells = nsfd_size_t_mult (geom_data_p->imax + N_B_CELLS,
                                      geom_data_p->jmax + N_B_CELLS,

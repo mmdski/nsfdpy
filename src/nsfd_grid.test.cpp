@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-// #define GRID_INDEX(jmax, i, j) (j * (imax + 2) + j)
 #define GRID_INDEX(imax, i, j) (j * (imax + 2) + i)
 
 extern "C"
@@ -24,7 +23,7 @@ TEST (NSFDGridGeom, init_p)
   NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
   nsfd_grid_geom_init_p (grid_geom_p);
   nsfd_grid_geom_free (&grid_geom_p);
-  ASSERT_EQ ((long) grid_geom_p, NULL);
+  ASSERT_EQ ((size_t) grid_geom_p, NULL);
 }
 
 TEST (NSFDGridGeom, init_u)
@@ -33,7 +32,7 @@ TEST (NSFDGridGeom, init_u)
   NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
   nsfd_grid_geom_init_u (grid_geom_p);
   nsfd_grid_geom_free (&grid_geom_p);
-  ASSERT_EQ ((long) grid_geom_p, NULL);
+  ASSERT_EQ ((size_t) grid_geom_p, NULL);
 }
 
 TEST (NSFDGridGeom, init_v)
@@ -42,7 +41,7 @@ TEST (NSFDGridGeom, init_v)
   NSFDGridGeom    *grid_geom_p = nsfd_grid_geom_new (&geom_data);
   nsfd_grid_geom_init_v (grid_geom_p);
   nsfd_grid_geom_free (&grid_geom_p);
-  ASSERT_EQ ((long) grid_geom_p, NULL);
+  ASSERT_EQ ((size_t) grid_geom_p, NULL);
 }
 
 TEST (NSFDGridGeom, n_cells)
