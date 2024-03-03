@@ -68,7 +68,7 @@ target_sources(nsfd
 
 if(BUILD_TESTS)
     add_executable(nsfd_grid.test src/nsfd_grid.test.cpp)
-    target_link_libraries(nsfd_grid.test nsfd GTest::gtest GTest::gtest_main)
+    target_link_libraries(nsfd_grid.test nsfd GTest::gtest_main)
     gtest_add_tests(TARGET nsfd_grid.test TEST_LIST nsfd_grid.test-list)
     set_tests_properties(${nsfd_grid.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
 endif()
