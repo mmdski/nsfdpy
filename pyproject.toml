@@ -1,0 +1,31 @@
+[build-system]
+requires = ["scikit-build-core", "cython"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "nsfd"
+version = "0.0.1"
+readme = "README.md"
+license.file = "LICENSE"
+dependencies = ["matplotlib", "numpy"]
+
+[project.optional-dependencies]
+dev = ["mypy", "nox"]
+docs = ["sphinx", "sphinx-autodoc-typehints"]
+nb = ["notebook", "ipykernel"]
+
+[tool.scikit-build]
+cmake.verbose = true
+cmake.build-type = "Release"
+logging.level = "INFO"
+sdist.exclude = [
+    ".vscode/",
+    ".clang-format",
+    ".clang-tidy",
+    ".gitattributes",
+    ".gitignore",
+    "lsan.supp",
+]
+
+[tool.scikit-build.cmake.define]
+SCIKIT_BUILD = "YES"
