@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "autodoc",
     "cond",
     "delt",
     "delx",
@@ -11,37 +12,35 @@
     "genindex",
     "hlines",
     "imax",
+    "ipykernel",
     "itermax",
     "jmax",
     "libnsfd",
     "linestyles",
     "LINETO",
     "linewidth",
+    "matplotlib",
     "maxdepth",
     "modindex",
     "mpatches",
     "mpath",
+    "mypy",
     "nosidebar",
     "NSFD",
     "NSFDB",
+    "nsfdpy",
+    "numpy",
     "pymem",
     "quickstart",
     "struct",
     "texttt",
     "toctree",
+    "typehints",
     "vlines",
     "xlength",
     "ylength"
   ],
-  "cmake.configureSettings": {
-    "BUILD_TESTS": true,
-    "INSTALL_GTEST": false,
-    "BUILD_GMOCK": false,
-    "ENABLE_ASAN": true,
-    "ENABLE_LSAN": true,
-    "ENABLE_UBSAN": true
-  },
-  "C_Cpp.codeAnalysis.clangTidy.enabled": true,
   "notebook.lineNumbers": "on",
-  "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
+  "esbonio.sphinx.confDir": "${workspaceFolder}/docs",
+  "python.terminal.activateEnvInCurrentTerminal": true
 }

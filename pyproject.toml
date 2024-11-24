@@ -1,31 +1,21 @@
 [build-system]
-requires = ["scikit-build-core", "cython"]
-build-backend = "scikit_build_core.build"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
-name = "nsfd"
+name = "nsfdpy"
 version = "0.0.1"
 readme = "README.md"
+authors = [{ name = "Marian Domanski", email = "shrieks.walnut.0s@icloud.com" }]
 license.file = "LICENSE"
 dependencies = ["matplotlib", "numpy"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 
 [project.optional-dependencies]
 dev = ["mypy", "nox"]
-docs = ["sphinx", "sphinx-autodoc-typehints"]
 nb = ["notebook", "ipykernel"]
-
-[tool.scikit-build]
-cmake.verbose = true
-cmake.build-type = "Release"
-logging.level = "INFO"
-sdist.exclude = [
-    ".vscode/",
-    ".clang-format",
-    ".clang-tidy",
-    ".gitattributes",
-    ".gitignore",
-    "lsan.supp",
-]
-
-[tool.scikit-build.cmake.define]
-SCIKIT_BUILD = "YES"
