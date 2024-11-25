@@ -14,8 +14,20 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: GNU General Public License (GPL)",
     "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
 ]
 
 [project.optional-dependencies]
 dev = ["mypy", "nox"]
 nb = ["notebook", "ipykernel"]
+
+[tool.mypy]
+disallow_untyped_defs = true
+files = "src"
+python_version = "3.13"
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+ignore_missing_imports = true
+warn_unreachable = true
+warn_return_any = true
+strict = true

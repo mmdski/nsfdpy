@@ -21,6 +21,7 @@
     "linewidth",
     "matplotlib",
     "maxdepth",
+    "meshgrid",
     "modindex",
     "mpatches",
     "mpath",
