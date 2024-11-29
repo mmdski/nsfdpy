@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib.path as mpath
 import numpy as np
-import numpy.typing as npt
 
 from nsfdpy.typing import GeometryData
+from nsfdpy.grid import grid_lines
 
 
 class Coordinates:
@@ -18,8 +18,11 @@ class Coordinates:
         self._del = length / max
         self._frac = frac
 
-    def __call__(self, i: int) -> float:
+    def __getitem__(self, i: int) -> float:
         return self._del * (i - self._frac)
+
+    def __setitem__(self, i: int, value: Any) -> None:
+        raise NotImplementedError
 
 
 class GridCoordinates:
@@ -31,23 +34,13 @@ class GridCoordinates:
         self.x = Coordinates(data["xlength"], data["imax"], x_frac)
         self.y = Coordinates(data["ylength"], data["jmax"], y_frac)
 
-    def meshgrid(self, boundary: bool = False) -> tuple[npt.NDArray[np.double], ...]:
+    def __getitem__(self, idx: tuple[int, int]) -> tuple[float, float]:
+        i = idx[0]
+        j = idx[1]
+        return self.x[i], self.y[j]
 
-        if boundary:
-            i_start = 0
-            i_stop = self._imax + 2
-            j_start = 0
-            j_stop = self._jmax + 2
-        else:
-            i_start = 1
-            i_stop = self._imax + 1
-            j_start = 1
-            j_stop = self._jmax + 1
-
-        x = [self.x(i) for i in range(i_start, i_stop)]
-        y = [self.y(j) for j in range(j_start, j_stop)]
-
-        return np.meshgrid(x, y)
+    def dim(self) -> tuple[int, int]:
+        return self._imax, self._jmax
 
     def plot(
         self, ax: Axes | None = None, boundary: bool = False, **kwargs: dict[str, Any]
@@ -56,7 +49,20 @@ class GridCoordinates:
         if not ax:
             ax = plt.axes()
 
-        X, Y = self.meshgrid(boundary)
+        if boundary:
+            size = (self._imax + 2, self._jmax + 2)
+            offset = 0
+        else:
+            size = (self._imax, self._jmax)
+            offset = 1
+
+        X = np.empty(size)
+        Y = np.empty(size)
+        for i in range(size[0]):
+            for j in range(size[1]):
+                x, y = self[i + offset, j + offset]
+                X[i, j] = x
+                Y[i, j] = y
 
         ax.scatter(X, Y, **kwargs)  # type: ignore[arg-type]
 
@@ -74,30 +80,17 @@ class Geometry:
         self.v = GridCoordinates(data, 0.5, 0)
 
     @staticmethod
-    def _plot_grid_cells(geom_data: GeometryData, ax: Axes, bc: bool = False) -> Axes:
+    def _plot_grid_cells(
+        geom_data: GeometryData, ax: Axes, boundary: bool = False
+    ) -> Axes:
 
-        delx = geom_data["xlength"] / geom_data["imax"]
-        dely = geom_data["ylength"] / geom_data["jmax"]
+        v_grid_lines, h_grid_lines = grid_lines(geom_data, boundary)
 
-        if bc:
-            ymin = -dely
-            ymax = geom_data["ylength"] + dely
-            num_v_grid_lines = geom_data["imax"] + 3
+        ymin = h_grid_lines[0]
+        ymax = h_grid_lines[-1]
 
-            xmin = -delx
-            xmax = geom_data["xlength"] + delx
-            num_h_grid_lines = geom_data["jmax"] + 3
-        else:
-            ymin = 0
-            ymax = geom_data["ylength"]
-            num_v_grid_lines = geom_data["imax"] + 1
-
-            xmin = 0
-            xmax = geom_data["xlength"]
-            num_h_grid_lines = geom_data["jmax"] + 1
-
-        v_grid_lines = np.linspace(xmin, xmax, num_v_grid_lines)
-        h_grid_lines = np.linspace(ymin, ymax, num_h_grid_lines)
+        xmin = v_grid_lines[0]
+        xmax = v_grid_lines[-1]
 
         ax.vlines(
             v_grid_lines,

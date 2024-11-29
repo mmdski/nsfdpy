@@ -21,9 +21,6 @@ class GeometryData(TypedDict):
 class TimeStepData(TypedDict):
     """Time-stepping data"""
 
-    t: float
-    """Current time value"""
-
     t_max: float
     """Final time :math:`t_{\\text{end}}`"""
 
@@ -33,18 +30,15 @@ class TimeStepData(TypedDict):
     tau: float
     """Safety factor for time step size control :math:`\\tau`"""
 
+    t: Optional[float]
+    """Current time value"""
+
 
 class PressureIterData(TypedDict):
     """Pressure-iteration data"""
 
     itermax: int
     """Maximum number of pressure iterations in one time step"""
-
-    it: int
-    """SOR iteration counter"""
-
-    res: float
-    """Norm of pressure equation residual"""
 
     eps: float
     """Stopping tolerance :math:`\\epsilon` for pressure iteration"""
@@ -54,6 +48,12 @@ class PressureIterData(TypedDict):
 
     gamma: float
     """Upwind differencing factor :math:`\\gamma`"""
+
+    it: Optional[int]
+    """SOR iteration counter"""
+
+    res: Optional[float]
+    """Norm of pressure equation residual"""
 
 
 class BCondition(Enum):
@@ -69,6 +69,9 @@ class BCondition(Enum):
 
     OUTFLOW = 3
     """Outflow boundary condition"""
+
+    PERIODIC = 4
+    """Periodic boundary condition"""
 
 
 class ProblemData(TypedDict):
