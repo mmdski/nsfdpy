@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "autodoc",
+    "bcond",
     "cond",
     "delt",
     "delx",
@@ -12,6 +13,7 @@
     "genindex",
     "hlines",
     "imax",
+    "Interp",
     "ipykernel",
     "itermax",
     "jmax",
@@ -31,6 +33,7 @@
     "NSFDB",
     "nsfdpy",
     "numpy",
+    "pcolormesh",
     "pymem",
     "quickstart",
     "struct",
