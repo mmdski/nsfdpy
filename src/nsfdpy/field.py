@@ -59,7 +59,7 @@ class VectorField:
                 raise ValueError("Invalid shape of ndarray")
             self._values = values.copy()
         else:
-            self._values = np.empty(size, dtype=float)
+            self._values = np.zeros(size, dtype=float)
 
         if initial_value is not None:
             self._values[:, :, 0].fill(initial_value[0])
@@ -74,6 +74,17 @@ class VectorField:
         result = cls.__new__(cls)
 
         result._values = self._values + other._values
+        result.u = result._values[:, :, 0]
+        result.v = result._values[:, :, 1]
+
+        return result
+
+    def __radd__(self, other: float | tuple[float, float]) -> "VectorField":
+
+        cls = self.__class__
+        result = cls.__new__(cls)
+
+        result._values = other + self._values
         result.u = result._values[:, :, 0]
         result.v = result._values[:, :, 1]
 
