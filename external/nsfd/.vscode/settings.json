@@ -1,0 +1,19 @@
+{
+  "cSpell.words": [
+    "delx",
+    "dely",
+    "googletest",
+    "gtest",
+    "jmax",
+    "MSVC",
+    "nsfd",
+    "SRCS",
+    "Werror",
+    "Wextra",
+    "xlength",
+    "ylength"
+  ],
+  "editor.tabSize": 4,
+  "editor.indentSize": 2,
+  "C_Cpp.codeAnalysis.clangTidy.enabled": true
+}

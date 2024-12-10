@@ -1,0 +1,4 @@
+leak:realizeClassWithoutSwift
+leak:_fetchInitializingClassList
+leak:cache_t::insert
+leak:wrap_snprintf
