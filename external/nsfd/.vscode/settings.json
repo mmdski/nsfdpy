@@ -8,12 +8,18 @@
     "MSVC",
     "nsfd",
     "SRCS",
+    "Wconversion",
     "Werror",
     "Wextra",
+    "xfrac",
     "xlength",
+    "yfrac",
     "ylength"
   ],
   "editor.tabSize": 4,
   "editor.indentSize": 2,
-  "C_Cpp.codeAnalysis.clangTidy.enabled": true
+  "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+  "cmake.configureSettings": {
+    "nsfd_BUILD_EXAMPLES": "YES"
+  }
 }

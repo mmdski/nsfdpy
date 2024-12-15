@@ -1,3 +1,6 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from copy import deepcopy
 from typing import cast
 
@@ -27,12 +30,12 @@ class CompFG:
         FG = u + delt * (self._g + 1 / self._Re * (self._lap(u) - self._adv(u, u)))
 
         for j in range(1, self._grid.jmax + 1):
-            FG.u[0, j] = u.u[0, j]
-            FG.u[self._grid.imax, j] = u.u[self._grid.imax, j]
+            FG[0, j].u = u[0, j].u
+            FG[self._grid.imax, j].u = u[self._grid.imax, j].u
 
         for i in range(1, self._grid.imax + 1):
-            FG.v[i, 0] = u.v[i, 0]
-            FG.v[i, self._grid.jmax] = u.v[i, self._grid.jmax]
+            FG[i, 0].v = u[i, 0].v
+            FG[i, self._grid.jmax].v = u[i, self._grid.jmax].v
 
         return FG
 
@@ -62,8 +65,8 @@ class CompRHS:
                     1
                     / delt
                     * (
-                        (FG.u[i, j] - FG.u[i - 1, j]) / self._grid.delx
-                        + (FG.v[i, j] - FG.v[i, j - 1]) / self._grid.dely
+                        (FG[i, j].u - FG[i - 1, j].u) / self._grid.delx
+                        + (FG[i, j].v - FG[i, j - 1].v) / self._grid.dely
                     )
                 )
 
@@ -104,11 +107,11 @@ class IterPressure:
                         - rhs[i, j]
                     )
 
-                    norm = self._calc_norm(pit, rhs)
+            norm = self._calc_norm(pit, rhs)
 
-                    if norm < self._eps:
-                        self._n_it = it
-                        return pit
+            if norm < self._eps:
+                self._n_it = it
+                return pit
 
         self._n_it = it
         return pit
@@ -131,8 +134,8 @@ class IterPressure:
         self, pit: ScalarField, rhs: npt.NDArray[np.float64]
     ) -> npt.NDArray[np.float64]:
 
-        for i in range(self._grid.imax + 1):
-            for j in range(self._grid.jmax + 1):
+        for i in range(1, self._grid.imax + 1):
+            for j in range(1, self._grid.jmax + 1):
                 self._rit[i, j] = (
                     (pit[i + 1, j] - 2 * pit[i, j] + pit[i - 1, j]) / self._grid.delx**2
                     + (pit[i, j + 1] - 2 * pit[i, j] + pit[i, j - 1])

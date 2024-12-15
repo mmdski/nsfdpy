@@ -1,3 +1,6 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from nsfdpy.field import VectorField
 from nsfdpy.grid import StaggeredGrid
 
@@ -19,7 +22,7 @@ class CompDelT:
 
         ts1 = (self._Re / 2) / ((1 / self._grid.delx**2) + (1 / self._grid.dely**2))
 
-        u_abs_max, v_abs_max = u.abs_max()
+        u_abs_max, v_abs_max = u.max_abs_components()
 
         if u_abs_max == 0:
             cfl_x = ts1

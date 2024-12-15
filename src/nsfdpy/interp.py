@@ -1,3 +1,6 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from typing import cast
 
 from nsfdpy.grid import StaggeredGrid
@@ -28,10 +31,10 @@ class VectorFieldInterp:
         y1 = ((j - 1) - 0.5) * dely
         y2 = (j - 0.5) * dely
 
-        u1 = self._field.u[i - 1, j - 1]
-        u2 = self._field.u[i, j - 1]
-        u3 = self._field.u[i - 1, j]
-        u4 = self._field.u[i, j]
+        u1 = self._field[i - 1, j - 1].u
+        u2 = self._field[i, j - 1].u
+        u3 = self._field[i - 1, j].u
+        u4 = self._field[i, j].u
 
         w1 = (x2 - x) * (y2 - y)
         w2 = (x - x1) * (y2 - y)
@@ -55,10 +58,10 @@ class VectorFieldInterp:
         y1 = (j - 1) * dely
         y2 = j * dely
 
-        v1 = self._field.v[i - 1, j - 1]
-        v2 = self._field.v[i, j - 1]
-        v3 = self._field.v[i - 1, j]
-        v4 = self._field.v[i, j]
+        v1 = self._field[i - 1, j - 1].v
+        v2 = self._field[i, j - 1].v
+        v3 = self._field[i - 1, j].v
+        v4 = self._field[i, j].v
 
         w1 = (x2 - x) * (y2 - y)
         w2 = (x - x1) * (y2 - y)

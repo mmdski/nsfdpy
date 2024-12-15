@@ -1,3 +1,6 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -21,8 +24,8 @@ class NoSlipWBCond(BCond):
     def __call__(self, u: VectorField, p: ScalarField) -> None:
 
         for j in range(1, self._grid.jmax + 1):
-            u.u[0, j] = 0
-            u.v[0, j] = -u.v[1, j]
+            u[0, j].u = 0
+            u[0, j].v = -u[1, j].v
 
 
 class NoSlipEBCond(BCond):
@@ -34,8 +37,8 @@ class NoSlipEBCond(BCond):
     def __call__(self, u: VectorField, p: ScalarField) -> None:
 
         for j in range(1, self._grid.jmax + 1):
-            u.u[self._grid.imax, j] = 0
-            u.v[self._grid.imax + 1, j] = -u.v[self._grid.imax, j]
+            u[self._grid.imax, j].u = 0
+            u[self._grid.imax + 1, j].v = -u[self._grid.imax, j].v
 
 
 class NoSlipNBCond(BCond):
@@ -47,8 +50,8 @@ class NoSlipNBCond(BCond):
     def __call__(self, u: VectorField, p: ScalarField) -> None:
 
         for i in range(1, self._grid.imax + 1):
-            u.u[i, self._grid.jmax + 1] = -u.u[i, self._grid.jmax]
-            u.v[i, self._grid.jmax] = 0.0
+            u[i, self._grid.jmax + 1].u = -u[i, self._grid.jmax].u
+            u[i, self._grid.jmax].v = 0.0
 
 
 class MovingWallNBCond(BCond):
@@ -61,8 +64,8 @@ class MovingWallNBCond(BCond):
     def __call__(self, u: VectorField, p: ScalarField) -> None:
 
         for i in range(1, self._grid.imax + 1):
-            u.u[i, self._grid.jmax + 1] = 2.0 * self._u - u.u[i, self._grid.jmax]
-            u.v[i, self._grid.jmax] = 0.0
+            u[i, self._grid.jmax + 1].u = 2.0 * self._u - u[i, self._grid.jmax].u
+            u[i, self._grid.jmax].v = 0.0
 
 
 class NoSlipSBCond(BCond):
@@ -74,8 +77,8 @@ class NoSlipSBCond(BCond):
     def __call__(self, u: VectorField, p: ScalarField) -> None:
 
         for i in range(1, self._grid.imax + 1):
-            u.u[i, 0] = -u.u[i, 1]
-            u.v[i, 0] = 0.0
+            u[i, 0].u = -u[i, 1].u
+            u[i, 0].v = 0.0
 
 
 class ApplyBCond:
