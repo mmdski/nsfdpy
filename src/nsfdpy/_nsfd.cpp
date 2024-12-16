@@ -19,6 +19,8 @@
 
 namespace py = pybind11;
 
+py::module np = py::module::import("numpy");
+
 PYBIND11_MODULE(_nsfd, m) {
 
   py::class_<nsfd::Vector>(m, "Vector")
@@ -28,9 +30,6 @@ PYBIND11_MODULE(_nsfd, m) {
              return "nsfdpy.Vector(" + std::to_string(self.u) + ", " +
                     std::to_string(self.v) + ")";
            })
-      //   .def("__add__",
-      //        [](const nsfd::Vector &self, const nsfd::field::Vector &rhs)
-      //            -> nsfd::field::Vector { return self + rhs; })
       .def_readwrite("u", &nsfd::Vector::u)
       .def_readwrite("v", &nsfd::Vector::v);
 
@@ -118,8 +117,51 @@ PYBIND11_MODULE(_nsfd, m) {
               double s) {
              self(std::get<0>(idx), std::get<1>(idx)) = nsfd::Scalar(s);
            })
-      .def("shape", &nsfd::field::Scalar::shape)
+      .def_static("loadtxt",
+                  [](const std::string &filename) {
+                    py::object dtype = np.attr("float64");
+                    py::array s = np.attr("loadtxt")(py::str(filename),
+                                                     py::arg("dtype") = dtype,
+                                                     py::arg("ndmin") = 2);
+                    const ssize_t *shape = s.shape();
+                    if (shape[0] < 3)
+                      throw std::runtime_error(
+                          "shape[0] must be greater than or equal to 3");
+                    if (shape[1] < 3)
+                      throw std::runtime_error(
+                          "shape[1] must be greater than or equal to 3");
+
+                    size_t n_i = static_cast<size_t>(shape[0]);
+                    size_t n_j = static_cast<size_t>(shape[1]);
+
+                    nsfd::field::Scalar sf(n_i - 2, n_j - 2);
+                    const double *s_data =
+                        static_cast<const double *>(s.data());
+
+                    for (size_t i = 0; i < n_i; ++i) {
+                      for (size_t j = 0; j < n_j; ++j) {
+                        sf(i, j) = s_data[i * n_j + j];
+                      }
+                    }
+
+                    return sf;
+                  })
       .def("max_abs", &nsfd::field::Scalar::max_abs)
+      .def("savetxt",
+           [](nsfd::field::Scalar &self, const std::string &filename) {
+             auto [n_i, n_j] = self.shape();
+             py::array_t<double> s({n_i, n_j});
+             auto s_buf = s.mutable_unchecked<2>();
+
+             for (size_t i = 0; i < n_i; ++i) {
+               for (size_t j = 0; j < n_j; ++j) {
+                 s_buf(i, j) = static_cast<double>(self(i, j));
+               }
+             }
+
+             np.attr("savetxt")(filename, s);
+           })
+      .def("shape", &nsfd::field::Scalar::shape)
       .def_property_readonly("values", [](nsfd::field::Scalar &self) {
         auto [n_i, n_j] = self.shape();
         py::array_t<double> s({n_i, n_j});
