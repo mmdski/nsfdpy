@@ -41,8 +41,6 @@ struct Vector {
     return {this->u + rhs.u, this->v + rhs.v};
   }
 
-  field::Vector operator+(const field::Vector& rhs) const;
-
   Vector& operator+(double rhs) {
     this->u += rhs;
     this->v += rhs;

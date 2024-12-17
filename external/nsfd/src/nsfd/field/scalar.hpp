@@ -12,7 +12,10 @@
 namespace nsfd {
 namespace field {
 class Scalar : public Field<nsfd::Scalar, Scalar> {
+ public:
   using Field<nsfd::Scalar, Scalar>::Field;
+  Scalar(size_t imax, size_t jmax, double inital_value)
+      : Field(imax, jmax, inital_value) {}
 };
 }  // namespace field
 }  // namespace nsfd
