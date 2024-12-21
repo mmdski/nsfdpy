@@ -27,16 +27,11 @@ class Field {
       : imax_{imax}, jmax_{jmax}, values_(((imax + 2) * (jmax + 2))) {
     for (auto &u : values_) u = initial_value;
   }
-
-  double max_abs() {
-    double max_abs = 0;
-    double abs = 0;
-    for (auto v : values_) {
-      abs = v.abs();
-      if (abs > max_abs) max_abs = abs;
-    }
-    return max_abs;
-  }
+  Field(std::tuple<size_t, size_t> n_interior)
+      : imax_{std::get<0>(n_interior)},
+        jmax_{std::get<1>(n_interior)},
+        values_(
+            ((std::get<0>(n_interior) + 2) * (std::get<1>(n_interior) + 2))) {}
 
   /* addition */
   D operator+(const Field<T, D> &rhs) const {
@@ -77,8 +72,17 @@ class Field {
     return values_[i * (jmax_ + 2) + j];
   }
 
-  std::tuple<size_t, size_t> shape() const { return {imax_ + 2, jmax_ + 2}; }
+  double max_abs() {
+    double max_abs = 0;
+    double abs = 0;
+    for (auto v : values_) {
+      abs = v.abs();
+      if (abs > max_abs) max_abs = abs;
+    }
+    return max_abs;
+  }
   std::tuple<size_t, size_t> n_interior() const { return {imax_, jmax_}; }
+  std::tuple<size_t, size_t> shape() const { return {imax_ + 2, jmax_ + 2}; }
 };
 }  // namespace field
 }  // namespace nsfd

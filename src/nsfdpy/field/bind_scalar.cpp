@@ -48,6 +48,10 @@ nsfd::field::Scalar *loadtxt(const std::string &filename) {
   return sf;
 }
 
+nsfd::field::Scalar *new_like(nsfd::field::Scalar &self) {
+  return new nsfd::field::Scalar(self.n_interior());
+}
+
 void savetxt(nsfd::field::Scalar &self, const std::string &filename) {
   auto [n_i, n_j] = self.shape();
   py::array_t<double> s({n_i, n_j});
@@ -87,6 +91,7 @@ void bindScalar(py::module_ &m) {
       .def("__setitem__", &__setitem__)
       .def_static("loadtxt", &loadtxt)
       .def("max_abs", &nsfd::field::Scalar::max_abs)
+      .def("new_like", &new_like)
       .def("savetxt", &savetxt)
       .def("shape", &nsfd::field::Scalar::shape)
       .def_property_readonly("values", &values);
