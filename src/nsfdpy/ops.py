@@ -22,11 +22,11 @@ class ScalarGradient:
 
         for i in range(1, self._grid.imax):
             for j in range(1, self._grid.jmax + 1):
-                output[i, j].u = (p[i + 1, j] - p[i, j]) / self._grid.delx
+                output[i, j].x = (p[i + 1, j] - p[i, j]) / self._grid.delx
 
         for i in range(1, self._grid.imax + 1):
             for j in range(1, self._grid.jmax):
-                output[i, j].v = (p[i, j - 1] - p[i, j]) / self._grid.dely
+                output[i, j].y = (p[i, j - 1] - p[i, j]) / self._grid.dely
 
         return output
 
@@ -47,25 +47,25 @@ class VectorLaplacian:
             for j in range(1, self._grid.jmax + 1):
 
                 d2udx2 = (
-                    u[i + 1, j].u - 2 * u[i, j].u + u[i - 1, j].u
+                    u[i + 1, j].x - 2 * u[i, j].x + u[i - 1, j].x
                 ) / self._grid.delx**2
                 d2udy2 = (
-                    u[i, j + 1].u - 2 * u[i, j].u + u[i, j - 1].u
+                    u[i, j + 1].x - 2 * u[i, j].x + u[i, j - 1].x
                 ) / self._grid.dely**2
 
-                output[i, j].u = d2udx2 + d2udy2
+                output[i, j].x = d2udx2 + d2udy2
 
         for i in range(1, self._grid.imax + 1):
             for j in range(1, self._grid.jmax):
 
                 d2vdx2 = (
-                    u[i + 1, j].v - 2 * u[i, j].v + u[i - 1, j].v
+                    u[i + 1, j].y - 2 * u[i, j].y + u[i - 1, j].y
                 ) / self._grid.delx**2
                 d2vdy2 = (
-                    u[i, j + 1].v - 2 * u[i, j].v + u[i, j - 1].v
+                    u[i, j + 1].y - 2 * u[i, j].y + u[i, j - 1].y
                 ) / self._grid.dely**2
 
-                output[i, j].v = d2vdx2 + d2vdy2
+                output[i, j].y = d2vdx2 + d2vdy2
 
         return output
 
@@ -97,40 +97,40 @@ class VectorAdvection:
         for i in range(1, self._grid.imax):
             for j in range(1, self._grid.jmax + 1):
 
-                kr_u = (u[i, j].u + u[i + 1, j].u) / 2
-                kl_u = (u[i - 1, j].u + u[i, j].u) / 2
+                kr_u = (u[i, j].x + u[i + 1, j].x) / 2
+                kl_u = (u[i - 1, j].x + u[i, j].x) / 2
 
                 du2dx = (
                     1
                     / self._grid.delx
                     * (
                         (
-                            kr_u * (a[i, j].u + a[i + 1, j].u) / 2
-                            - kl_u * (a[i - 1, j].u + a[i, j].u) / 2
+                            kr_u * (a[i, j].x + a[i + 1, j].x) / 2
+                            - kl_u * (a[i - 1, j].x + a[i, j].x) / 2
                         )
                         + self._gamma
                         * (
-                            np.abs(kr_u) * (a[i, j].u - a[i + 1, j].u) / 2
-                            - np.abs(kl_u) * (a[i - 1, j].u - a[i, j].u) / 2
+                            np.abs(kr_u) * (a[i, j].x - a[i + 1, j].x) / 2
+                            - np.abs(kl_u) * (a[i - 1, j].x - a[i, j].x) / 2
                         )
                     )
                 )
 
-                kr_v = (u[i, j].v + u[i + 1, j].v) / 2
-                kl_v = (u[i, j - 1].v + u[i + 1, j - 1].v) / 2
+                kr_v = (u[i, j].y + u[i + 1, j].y) / 2
+                kl_v = (u[i, j - 1].y + u[i + 1, j - 1].y) / 2
 
                 duvdy = (
                     1
                     / self._grid.dely
                     * (
                         (
-                            kr_v * (a[i, j].u + a[i, j + 1].u) / 2
-                            - kl_v * (a[i, j - 1].u + a[i, j].u) / 2
+                            kr_v * (a[i, j].x + a[i, j + 1].x) / 2
+                            - kl_v * (a[i, j - 1].x + a[i, j].x) / 2
                         )
                         + self._gamma
                         * (
-                            np.abs(kr_v) * (a[i, j].u - a[i, j + 1].u) / 2
-                            - np.abs(kl_v) * (a[i, j - 1].u - a[i, j].u) / 2
+                            np.abs(kr_v) * (a[i, j].x - a[i, j + 1].x) / 2
+                            - np.abs(kl_v) * (a[i, j - 1].x - a[i, j].x) / 2
                         )
                     )
                 )
@@ -142,42 +142,42 @@ class VectorAdvection:
         for i in range(1, self._grid.imax + 1):
             for j in range(1, self._grid.jmax):
 
-                kr_u = (u[i, j].u + u[i, j + 1].u) / 2
-                kl_u = (u[i - 1, j].u + u[i - 1, j + 1].u) / 2
+                kr_u = (u[i, j].x + u[i, j + 1].x) / 2
+                kl_u = (u[i - 1, j].x + u[i - 1, j + 1].x) / 2
 
                 duvdx = (
                     1
                     / self._grid.delx
                     * (
                         (
-                            kr_u * (a[i, j].v + a[i + 1, j].v) / 2
-                            - kl_u * (a[i - 1, j].v + a[i, j].v) / 2
+                            kr_u * (a[i, j].y + a[i + 1, j].y) / 2
+                            - kl_u * (a[i - 1, j].y + a[i, j].y) / 2
                         )
                         + self._gamma
                         * (
-                            np.abs(kr_u) * (a[i, j].v - a[i + 1, j].v) / 2
-                            - np.abs(kl_u) * (a[i - 1, j].v - a[i, j].v) / 2
+                            np.abs(kr_u) * (a[i, j].y - a[i + 1, j].y) / 2
+                            - np.abs(kl_u) * (a[i - 1, j].y - a[i, j].y) / 2
                         )
                     )
                 )
 
-                kr_v = (u[i, j].v + u[i, j + 1].v) / 2
-                kl_v = (u[i, j - 1].v + u[i, j].v) / 2
+                kr_v = (u[i, j].y + u[i, j + 1].y) / 2
+                kl_v = (u[i, j - 1].y + u[i, j].y) / 2
 
                 dv2dy = (
                     1
                     / self._grid.dely
                     * (
                         (
-                            kr_v * (a[i, j].v + a[i, j + 1].v) / 2
-                            - kl_v * (a[i, j - 1].v + a[i, j].v) / 2
+                            kr_v * (a[i, j].y + a[i, j + 1].y) / 2
+                            - kl_v * (a[i, j - 1].y + a[i, j].y) / 2
                         )
                         + self._gamma
                         * (
-                            np.abs(kr_v) * (a[i, j].v - a[i, j + 1].v) / 2
-                            - np.abs(kl_v) * (a[i, j - 1].v - a[i, j].v) / 2
+                            np.abs(kr_v) * (a[i, j].y - a[i, j + 1].y) / 2
+                            - np.abs(kl_v) * (a[i, j - 1].y - a[i, j].y) / 2
                         )
                     )
                 )
 
-                output[i, j].v = duvdx + dv2dy
+                output[i, j].y = duvdx + dv2dy

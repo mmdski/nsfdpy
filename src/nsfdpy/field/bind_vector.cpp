@@ -66,8 +66,8 @@ void bindVector(py::module_ &m) {
 
             for (size_t i = 0; i < n_i; ++i) {
               for (size_t j = 0; j < n_j; ++j) {
-                s_buf(i, j, 0) = self(i, j).u;
-                s_buf(i, j, 1) = self(i, j).v;
+                s_buf(i, j, 0) = self(i, j).x;
+                s_buf(i, j, 1) = self(i, j).y;
               }
             }
             return s;
@@ -80,7 +80,7 @@ void bindVector(py::module_ &m) {
 
                                for (size_t i = 0; i < n_i; ++i) {
                                  for (size_t j = 0; j < n_j; ++j) {
-                                   u_buf(i, j) = self(i, j).u;
+                                   u_buf(i, j) = self(i, j).x;
                                  }
                                }
                                return u;
@@ -93,7 +93,7 @@ void bindVector(py::module_ &m) {
 
                                for (size_t i = 0; i < n_i; ++i) {
                                  for (size_t j = 0; j < n_j; ++j) {
-                                   v_buf(i, j) = self(i, j).v;
+                                   v_buf(i, j) = self(i, j).y;
                                  }
                                }
                                return v;

@@ -9,6 +9,8 @@
 #include <cmath>
 #include <tuple>
 
+#include "scalar.hpp"
+
 namespace nsfd {
 
 namespace field {
@@ -16,49 +18,60 @@ class Vector;
 }
 
 struct Vector {
-  double u;
-  double v;
+  double x;
+  double y;
 
-  Vector() : u{0}, v{0} {}
-  Vector(double u, double v) : u{u}, v{v} {}
-  Vector(std::tuple<double, double> U) : u{std::get<0>(U)}, v{std::get<1>(U)} {}
+  Vector() : x{0}, y{0} {}
+  Vector(double x, double y) : x{x}, y{y} {}
+  Vector(std::tuple<double, double> U) : x{std::get<0>(U)}, y{std::get<1>(U)} {}
 
   /* assignment */
   Vector& operator=(double rhs) {
-    this->u = rhs;
-    this->v = rhs;
+    this->x = rhs;
+    this->y = rhs;
     return *this;
   }
 
   Vector& operator=(std::tuple<double, double> rhs) {
-    this->u = std::get<0>(rhs);
-    this->v = std::get<1>(rhs);
+    this->x = std::get<0>(rhs);
+    this->y = std::get<1>(rhs);
     return *this;
   }
 
   /* addition */
   Vector operator+(const Vector& rhs) const {
-    return {this->u + rhs.u, this->v + rhs.v};
+    return {this->x + rhs.x, this->y + rhs.y};
   }
 
   Vector& operator+(double rhs) {
-    this->u += rhs;
-    this->v += rhs;
+    this->x += rhs;
+    this->y += rhs;
     return *this;
   }
 
+  Vector operator+(const Scalar& r) const { return {this->x + r, this->y + r}; }
+
+  friend Vector operator+(const Scalar& l, const Vector& r) {
+    return {r.x + l, r.y + l};
+  }
+
   Vector& operator+=(const Vector& rhs) {
-    this->u += rhs.u;
-    this->v += rhs.v;
+    this->x += rhs.x;
+    this->y += rhs.y;
     return *this;
   }
 
   /* subtraction */
   Vector operator-(const Vector& rhs) const {
-    return {this->u - rhs.u, this->v - rhs.v};
+    return {this->x - rhs.x, this->y - rhs.y};
   }
 
-  double abs() { return std::sqrt(this->u * this->u + this->v * this->v); }
+  /* multiplication */
+  friend Vector operator*(const Scalar& l, const Vector& r) {
+    return {r.x * l, r.y * l};
+  }
+
+  double abs() { return std::sqrt(this->x * this->x + this->y * this->y); }
 };
 }  // namespace nsfd
 

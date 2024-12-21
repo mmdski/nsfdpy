@@ -30,12 +30,12 @@ class CompFG:
         FG = u + delt * (self._g + 1 / self._Re * (self._lap(u) - self._adv(u, u)))
 
         for j in range(1, self._grid.jmax + 1):
-            FG[0, j].u = u[0, j].u
-            FG[self._grid.imax, j].u = u[self._grid.imax, j].u
+            FG[0, j].x = u[0, j].x
+            FG[self._grid.imax, j].x = u[self._grid.imax, j].x
 
         for i in range(1, self._grid.imax + 1):
-            FG[i, 0].v = u[i, 0].v
-            FG[i, self._grid.jmax].v = u[i, self._grid.jmax].v
+            FG[i, 0].y = u[i, 0].y
+            FG[i, self._grid.jmax].y = u[i, self._grid.jmax].y
 
         return FG
 
@@ -65,8 +65,8 @@ class CompRHS:
                     1
                     / delt
                     * (
-                        (FG[i, j].u - FG[i - 1, j].u) / self._grid.delx
-                        + (FG[i, j].v - FG[i, j - 1].v) / self._grid.dely
+                        (FG[i, j].x - FG[i - 1, j].x) / self._grid.delx
+                        + (FG[i, j].y - FG[i, j - 1].y) / self._grid.dely
                     )
                 )
 

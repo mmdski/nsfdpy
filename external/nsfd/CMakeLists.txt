@@ -52,6 +52,25 @@ target_sources(nsfd
 )
 
 if(nsfd_BUILD_TESTS)
+  add_executable(scalar.test src/nsfd/scalar.test.cpp)
+  target_link_libraries(scalar.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET scalar.test TEST_LIST scalar.test-list)
+  set_tests_properties(${scalar.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+
+  add_executable(vector.test src/nsfd/vector.test.cpp)
+  target_link_libraries(vector.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET vector.test TEST_LIST vector.test-list)
+  set_tests_properties(${vector.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+
+  add_executable(field.scalar.test src/nsfd/field/scalar.test.cpp)
+  target_link_libraries(field.scalar.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET field.scalar.test TEST_LIST field.scalar.test-list)
+  set_tests_properties(${field.scalar.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+
+  add_executable(field.vector.test src/nsfd/field/vector.test.cpp)
+  target_link_libraries(field.vector.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET field.vector.test TEST_LIST field.vector.test-list)
+  set_tests_properties(${field.vector.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
 endif()
 
 if(nsfd_BUILD_EXAMPLES)

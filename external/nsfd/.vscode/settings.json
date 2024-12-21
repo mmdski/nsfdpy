@@ -2,6 +2,7 @@
   "cSpell.words": [
     "delx",
     "dely",
+    "endmacro",
     "googletest",
     "gtest",
     "jmax",
@@ -20,6 +21,12 @@
   "editor.indentSize": 2,
   "C_Cpp.codeAnalysis.clangTidy.enabled": true,
   "cmake.configureSettings": {
-    "nsfd_BUILD_EXAMPLES": "YES"
+    "nsfd_BUILD_EXAMPLES": true,
+    "nsfd_BUILD_TESTS": true,
+    "INSTALL_GTEST": false,
+    "BUILD_GMOCK": false,
+    "ENABLE_ASAN": true,
+    "ENABLE_LSAN": true,
+    "ENABLE_UBSAN": true
   }
 }

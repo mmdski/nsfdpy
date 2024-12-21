@@ -9,6 +9,7 @@
 #include <cmath>
 #include <tuple>
 
+#include "../scalar.hpp"
 #include "../vector.hpp"
 #include "field.hpp"
 
@@ -22,12 +23,37 @@ class Vector : public Field<nsfd::Vector, Vector> {
       : Field(imax, jmax, initial_value) {}
 
   /* addition */
+  friend Vector operator+(const nsfd::Scalar &l, const Vector &r) {
+    auto [imax, jmax] = r.n_interior();
+    Vector res(imax, jmax);
+    for (size_t i = 0; i < imax + 2; ++i) {
+      for (size_t j = 0; j < imax + 2; ++j) {
+        res(i, j) = l + r(i, j);
+      }
+    }
+
+    return res;
+  }
+
   friend Vector operator+(const nsfd::Vector &l, const Vector &r) {
     auto [imax, jmax] = r.n_interior();
     Vector res(imax, jmax);
     for (size_t i = 0; i < imax + 2; ++i) {
       for (size_t j = 0; j < imax + 2; ++j) {
         res(i, j) = l + r(i, j);
+      }
+    }
+
+    return res;
+  }
+
+  /* multiplication */
+  friend Vector operator*(const nsfd::Scalar &l, const Vector &r) {
+    auto [imax, jmax] = r.n_interior();
+    Vector res(imax, jmax);
+    for (size_t i = 0; i < imax + 2; ++i) {
+      for (size_t j = 0; j < imax + 2; ++j) {
+        res(i, j) = l * r(i, j);
       }
     }
 
@@ -42,8 +68,8 @@ class Vector : public Field<nsfd::Vector, Vector> {
     for (size_t i = 1; i <= imax; ++i) {
       for (size_t j = 1; j <= jmax; ++j) {
         u = this->operator()(i, j);
-        u_abs = std::abs(u.u);
-        v_abs = std::abs(u.v);
+        u_abs = std::abs(u.x);
+        v_abs = std::abs(u.y);
         if (u_abs >= u_max) u_max = u_abs;
         if (v_abs >= v_max) v_max = v_abs;
       }

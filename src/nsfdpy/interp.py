@@ -31,10 +31,10 @@ class VectorFieldInterp:
         y1 = ((j - 1) - 0.5) * dely
         y2 = (j - 0.5) * dely
 
-        u1 = self._field[i - 1, j - 1].u
-        u2 = self._field[i, j - 1].u
-        u3 = self._field[i - 1, j].u
-        u4 = self._field[i, j].u
+        u1 = self._field[i - 1, j - 1].x
+        u2 = self._field[i, j - 1].x
+        u3 = self._field[i - 1, j].x
+        u4 = self._field[i, j].x
 
         w1 = (x2 - x) * (y2 - y)
         w2 = (x - x1) * (y2 - y)
@@ -58,10 +58,10 @@ class VectorFieldInterp:
         y1 = (j - 1) * dely
         y2 = j * dely
 
-        v1 = self._field[i - 1, j - 1].v
-        v2 = self._field[i, j - 1].v
-        v3 = self._field[i - 1, j].v
-        v4 = self._field[i, j].v
+        v1 = self._field[i - 1, j - 1].y
+        v2 = self._field[i, j - 1].y
+        v3 = self._field[i - 1, j].y
+        v4 = self._field[i, j].y
 
         w1 = (x2 - x) * (y2 - y)
         w2 = (x - x1) * (y2 - y)
