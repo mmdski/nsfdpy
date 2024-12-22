@@ -4,7 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #include <format>
+#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
+#include <tuple>
 
 #include <nsfd/vector.hpp>
 
@@ -23,7 +25,11 @@ namespace nsfdpy {
 void bindVector(py::module_ &m) {
   py::class_<nsfd::Vector>(m, "Vector")
       .def(py::init<double, double>(), py::arg("x") = 0, py::arg("y") = 0)
+      .def(py::init<std::tuple<double, double>>())
       .def("__repr__", __repr__)
+      .def(py::self + py::self)
+      .def(py::self - py::self)
+      .def(double() * py::self)
       .def_readwrite("x", &nsfd::Vector::x)
       .def_readwrite("y", &nsfd::Vector::y);
 }

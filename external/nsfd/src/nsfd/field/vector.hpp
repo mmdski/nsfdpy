@@ -22,44 +22,6 @@ class Vector : public Field<nsfd::Vector, Vector> {
   Vector(size_t imax, size_t jmax, std::tuple<double, double> initial_value)
       : Field(imax, jmax, initial_value) {}
 
-  /* addition */
-  friend Vector operator+(const nsfd::Scalar &l, const Vector &r) {
-    auto [imax, jmax] = r.n_interior();
-    Vector res(imax, jmax);
-    for (size_t i = 0; i < imax + 2; ++i) {
-      for (size_t j = 0; j < imax + 2; ++j) {
-        res(i, j) = l + r(i, j);
-      }
-    }
-
-    return res;
-  }
-
-  friend Vector operator+(const nsfd::Vector &l, const Vector &r) {
-    auto [imax, jmax] = r.n_interior();
-    Vector res(imax, jmax);
-    for (size_t i = 0; i < imax + 2; ++i) {
-      for (size_t j = 0; j < imax + 2; ++j) {
-        res(i, j) = l + r(i, j);
-      }
-    }
-
-    return res;
-  }
-
-  /* multiplication */
-  friend Vector operator*(const nsfd::Scalar &l, const Vector &r) {
-    auto [imax, jmax] = r.n_interior();
-    Vector res(imax, jmax);
-    for (size_t i = 0; i < imax + 2; ++i) {
-      for (size_t j = 0; j < imax + 2; ++j) {
-        res(i, j) = l * r(i, j);
-      }
-    }
-
-    return res;
-  }
-
   std::tuple<double, double> max_abs_components() {
     nsfd::Vector u = {0, 0};
     double u_abs = 0, v_abs = 0;

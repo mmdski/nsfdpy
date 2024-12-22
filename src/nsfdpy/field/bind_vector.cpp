@@ -27,21 +27,6 @@ void bindVector(py::module_ &m) {
       .def(py::init([](size_t imax, size_t jmax, nsfd::Vector inital_value) {
         return new nsfd::field::Vector(imax, jmax, inital_value);
       }))
-      .def("__add__",
-           [](const nsfd::field::Vector &self, const nsfd::field::Vector &rhs)
-               -> nsfd::field::Vector { return self + rhs; })
-      .def("__radd__",
-           [](const nsfd::field::Vector &self, double lhs)
-               -> nsfd::field::Vector { return nsfd::Scalar(lhs) + self; })
-      .def("__radd__",
-           [](const nsfd::field::Vector &self, std::tuple<double, double> lhs)
-               -> nsfd::field::Vector { return nsfd::Vector(lhs) + self; })
-      .def("__sub__",
-           [](const nsfd::field::Vector &self, const nsfd::field::Vector &rhs)
-               -> nsfd::field::Vector { return self - rhs; })
-      .def("__rmul__",
-           [](const nsfd::field::Vector &self, double lhs)
-               -> nsfd::field::Vector { return nsfd::Scalar(lhs) * self; })
       .def(
           "__getitem__",
           [](nsfd::field::Vector &self,

@@ -18,8 +18,8 @@ class Scalar {
   Scalar(double value) : value_{value} {}
 
   /* addition */
-  Scalar operator+(const Scalar &other) const {
-    return Scalar(this->value_ + other.value_);
+  Scalar operator+(const Scalar &r) const {
+    return Scalar(this->value_ + r.value_);
   }
 
   /* subtraction */

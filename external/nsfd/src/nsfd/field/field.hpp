@@ -33,34 +33,6 @@ class Field {
         values_(
             ((std::get<0>(n_interior) + 2) * (std::get<1>(n_interior) + 2))) {}
 
-  /* addition */
-  D operator+(const Field<T, D> &rhs) const {
-    /* fields must be the same size*/
-    if ((this->imax_ != rhs.imax_) || (this->jmax_ != rhs.jmax_))
-      throw std::invalid_argument("Size of rhs not equal to size of this");
-    D res(imax_, jmax_);
-    for (size_t i = 0; i < imax_ + 2; ++i) {
-      for (size_t j = 0; j < imax_ + 2; ++j) {
-        res(i, j) = (*this)(i, j) + rhs(i, j);
-      }
-    }
-    return res;
-  }
-
-  /* subtraction */
-  D operator-(const Field<T, D> &rhs) const {
-    /* fields must be the same size*/
-    if ((this->imax_ != rhs.imax_) || (this->jmax_ != rhs.jmax_))
-      throw std::invalid_argument("Size of rhs not equal to size of this");
-    D res(imax_, jmax_);
-    for (size_t i = 0; i < imax_ + 2; ++i) {
-      for (size_t j = 0; j < imax_ + 2; ++j) {
-        res(i, j) = (*this)(i, j) - rhs(i, j);
-      }
-    }
-    return res;
-  }
-
   T &operator()(size_t i, size_t j) {
     if (i > imax_ + 1) throw std::out_of_range("i is out of range");
     if (j > jmax_ + 1) throw std::out_of_range("j is out of range");

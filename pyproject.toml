@@ -22,6 +22,9 @@ classifiers = [
 dev = ["mypy", "nox"]
 nb = ["notebook", "ipykernel"]
 
+[tool.scikit-build]
+wheel.exclude = ["**.cpp", "**.hpp"]
+
 [tool.mypy]
 disallow_untyped_defs = true
 files = "src"

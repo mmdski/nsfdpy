@@ -7,6 +7,7 @@ from typing import cast
 import numpy as np
 import numpy.typing as npt
 
+from nsfdpy import Vector
 from nsfdpy.field import ScalarField, VectorField
 from nsfdpy.ops import VectorAdvection, VectorLaplacian
 from nsfdpy.grid import StaggeredGrid
@@ -19,15 +20,23 @@ class CompFG:
     ):
 
         self._grid = grid
-        self._g = g
+        self._g = Vector(g)
         self._Re = Re
 
-        self._lap = VectorLaplacian(self._grid)
-        self._adv = VectorAdvection(self._grid, gamma)
+        self._gamma = gamma
 
     def __call__(self, u: VectorField, delt: float) -> VectorField:
 
-        FG = u + delt * (self._g + 1 / self._Re * (self._lap(u) - self._adv(u, u)))
+        lap = VectorLaplacian(self._grid, u)
+        adv = VectorAdvection(self._grid, self._gamma, u, u)
+
+        FG = u.new_like()
+
+        for i in range(1, self._grid.imax + 1):
+            for j in range(1, self._grid.jmax + 1):
+                FG[i, j] = u[i, j] + delt * (
+                    self._g + 1 / self._Re * (lap(i, j) - adv(i, j))
+                )
 
         for j in range(1, self._grid.jmax + 1):
             FG[0, j].x = u[0, j].x

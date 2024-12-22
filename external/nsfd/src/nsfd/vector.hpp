@@ -39,13 +39,13 @@ struct Vector {
   }
 
   /* addition */
-  Vector operator+(const Vector& rhs) const {
-    return {this->x + rhs.x, this->y + rhs.y};
+  Vector operator+(const Vector& r) const {
+    return {this->x + r.x, this->y + r.y};
   }
 
-  Vector& operator+(double rhs) {
-    this->x += rhs;
-    this->y += rhs;
+  Vector& operator+(double r) {
+    this->x += r;
+    this->y += r;
     return *this;
   }
 
@@ -55,20 +55,24 @@ struct Vector {
     return {r.x + l, r.y + l};
   }
 
-  Vector& operator+=(const Vector& rhs) {
-    this->x += rhs.x;
-    this->y += rhs.y;
+  Vector& operator+=(const Vector& r) {
+    this->x += r.x;
+    this->y += r.y;
     return *this;
   }
 
   /* subtraction */
-  Vector operator-(const Vector& rhs) const {
-    return {this->x - rhs.x, this->y - rhs.y};
+  Vector operator-(const Vector& r) const {
+    return {this->x - r.x, this->y - r.y};
   }
 
   /* multiplication */
   friend Vector operator*(const Scalar& l, const Vector& r) {
     return {r.x * l, r.y * l};
+  }
+
+  friend Vector operator*(double l, const Vector& r) {
+    return {l * r.x, l * r.y};
   }
 
   double abs() { return std::sqrt(this->x * this->x + this->y * this->y); }
