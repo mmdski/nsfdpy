@@ -195,7 +195,7 @@ class VectorFieldPlot:
     def pcolormesh(
         self,
         field: VectorField,
-        component: Literal["u", "v"],
+        component: Literal["x", "y"],
         ax: Axes | None = None,
         boundary: bool = False,
         **kwargs: dict[str, Any],
@@ -204,10 +204,10 @@ class VectorFieldPlot:
         if not ax:
             ax = plt.axes()
 
-        if component == "u":
-            values = field.u
-        elif component == "v":
-            values = field.v
+        if component == "x":
+            values = field.x
+        elif component == "y":
+            values = field.y
         else:
             raise ValueError(f"Unrecognized component: {component}")
 

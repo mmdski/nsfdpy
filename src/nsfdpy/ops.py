@@ -135,7 +135,7 @@ class VectorAdvection:
                     )
                 )
 
-                output.u[i, j] = du2dx + duvdy
+                output[i, j].x = du2dx + duvdy
 
     def _y_component(self, a: VectorField, u: VectorField, output: VectorField) -> None:
 

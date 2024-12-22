@@ -76,31 +76,31 @@ void bindVector(py::module_ &m) {
             }
             return s;
           })
-      .def_property_readonly("u",
+      .def_property_readonly("x",
                              [](nsfd::field::Vector &self) {
                                auto [n_i, n_j] = self.shape();
-                               py::array_t<double> u({n_i, n_j});
-                               auto u_buf = u.mutable_unchecked<2>();
+                               py::array_t<double> x({n_i, n_j});
+                               auto x_buf = x.mutable_unchecked<2>();
 
                                for (size_t i = 0; i < n_i; ++i) {
                                  for (size_t j = 0; j < n_j; ++j) {
-                                   u_buf(i, j) = self(i, j).x;
+                                   x_buf(i, j) = self(i, j).x;
                                  }
                                }
-                               return u;
+                               return x;
                              })
-      .def_property_readonly("v",
+      .def_property_readonly("y",
                              [](nsfd::field::Vector &self) {
                                auto [n_i, n_j] = self.shape();
-                               py::array_t<double> v({n_i, n_j});
-                               auto v_buf = v.mutable_unchecked<2>();
+                               py::array_t<double> y({n_i, n_j});
+                               auto y_buf = y.mutable_unchecked<2>();
 
                                for (size_t i = 0; i < n_i; ++i) {
                                  for (size_t j = 0; j < n_j; ++j) {
-                                   v_buf(i, j) = self(i, j).y;
+                                   y_buf(i, j) = self(i, j).y;
                                  }
                                }
-                               return v;
+                               return y;
                              })
       .def("max_abs_components", &nsfd::field::Vector::max_abs_components);
 }
