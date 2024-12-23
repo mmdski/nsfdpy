@@ -4,8 +4,8 @@
 from nsfdpy._nsfd.ops import (
     Advection as VectorAdvection,
     Gradient as ScalarGradient,
-    Laplacian as VectorLaplacian,
+    Laplace as VectorLaplace,
 )
 
 
-__all__ = ["ScalarGradient", "VectorAdvection", "VectorLaplacian"]
+__all__ = ["ScalarGradient", "VectorAdvection", "VectorLaplace"]

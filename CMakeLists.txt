@@ -23,7 +23,7 @@ pybind11_add_module(_nsfd
     src/nsfdpy/grid/bind_staggered.cpp
     src/nsfdpy/ops/bind_advection.cpp
     src/nsfdpy/ops/bind_gradient.cpp
-    src/nsfdpy/ops/bind_laplacian.cpp
+    src/nsfdpy/ops/bind_laplace.cpp
 )
 target_link_libraries(_nsfd PRIVATE nsfd::nsfd)
 

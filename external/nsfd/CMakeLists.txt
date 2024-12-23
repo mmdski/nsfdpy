@@ -51,7 +51,7 @@ target_sources(nsfd
   src/nsfd/grid/staggered_grid.hpp
   src/nsfd/ops/advection.hpp
   src/nsfd/ops/gradient.hpp
-  src/nsfd/ops/laplacian.hpp
+  src/nsfd/ops/laplace.hpp
 )
 
 if(nsfd_BUILD_TESTS)
@@ -79,6 +79,11 @@ if(nsfd_BUILD_TESTS)
   target_link_libraries(ops.gradient.test nsfd::nsfd GTest::gtest_main)
   gtest_add_tests(TARGET ops.gradient.test TEST_LIST ops.gradient.test-list)
   set_tests_properties(${ops.gradient.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+
+  add_executable(ops.laplace.test src/nsfd/ops/laplace.test.cpp)
+  target_link_libraries(ops.laplace.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET ops.laplace.test TEST_LIST ops.laplace.test-list)
+  set_tests_properties(${ops.laplace.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
 endif()
 
 if(nsfd_BUILD_EXAMPLES)

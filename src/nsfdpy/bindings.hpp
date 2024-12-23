@@ -28,7 +28,7 @@ void bindVector(py::module_ &m);
 namespace ops {
 void bindAdvection(py::module_ &m);
 void bindGradient(py::module_ &m);
-void bindLaplacian(py::module_ &m);
+void bindLaplace(py::module_ &m);
 }  // namespace ops
 }  // namespace nsfdpy
 

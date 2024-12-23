@@ -3,21 +3,21 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-#ifndef NSFD_OPS_LAPLACIAN_HPP_
-#define NSFD_OPS_LAPLACIAN_HPP_
+#ifndef NSFD_OPS_LAPLACE_HPP_
+#define NSFD_OPS_LAPLACE_HPP_
 
 #include "../field/vector.hpp"
 #include "../grid/staggered_grid.hpp"
 
 namespace nsfd {
 namespace ops {
-class Laplacian {
+class Laplace {
  private:
   nsfd::grid::StaggeredGrid &grid_;
   nsfd::field::Vector &field_;
 
  public:
-  Laplacian(nsfd::grid::StaggeredGrid &grid, nsfd::field::Vector &field)
+  Laplace(nsfd::grid::StaggeredGrid &grid, nsfd::field::Vector &field)
       : grid_{grid}, field_{field} {}
 
   nsfd::Vector operator()(size_t i, size_t j) {

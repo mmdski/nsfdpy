@@ -6,7 +6,7 @@ import numpy.typing as npt
 
 from nsfdpy import Vector
 from nsfdpy.field import ScalarField, VectorField
-from nsfdpy.ops import ScalarGradient, VectorAdvection, VectorLaplacian
+from nsfdpy.ops import ScalarGradient, VectorAdvection, VectorLaplace
 from nsfdpy.grid import StaggeredGrid
 
 
@@ -24,7 +24,7 @@ class CompFG:
 
     def __call__(self, u: VectorField, delt: float) -> VectorField:
 
-        lap = VectorLaplacian(self._grid, u)
+        lap = VectorLaplace(self._grid, u)
         adv = VectorAdvection(self._grid, self._gamma, u, u)
 
         FG = u.new_like()

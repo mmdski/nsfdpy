@@ -7,15 +7,6 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-#include <nsfd/field/scalar.hpp>
-#include <nsfd/field/vector.hpp>
-#include <nsfd/grid/axis.hpp>
-#include <nsfd/grid/geom_data.hpp>
-#include <nsfd/grid/grid.hpp>
-#include <nsfd/grid/staggered_grid.hpp>
-#include <nsfd/scalar.hpp>
-#include <nsfd/vector.hpp>
-
 #include "bindings.hpp"
 
 namespace py = pybind11;
@@ -41,5 +32,5 @@ PYBIND11_MODULE(_nsfd, m) {
 
   nsfdpy::ops::bindAdvection(m_ops);
   nsfdpy::ops::bindGradient(m_ops);
-  nsfdpy::ops::bindLaplacian(m_ops);
+  nsfdpy::ops::bindLaplace(m_ops);
 }
