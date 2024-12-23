@@ -49,7 +49,9 @@ target_sources(nsfd
   src/nsfd/grid/geom_data.hpp
   src/nsfd/grid/grid.hpp
   src/nsfd/grid/staggered_grid.hpp
+  src/nsfd/ops/advection.hpp
   src/nsfd/ops/gradient.hpp
+  src/nsfd/ops/laplacian.hpp
 )
 
 if(nsfd_BUILD_TESTS)

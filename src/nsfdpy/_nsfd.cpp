@@ -39,6 +39,7 @@ PYBIND11_MODULE(_nsfd, m) {
 
   auto m_ops = m.def_submodule("ops");
 
+  nsfdpy::ops::bindAdvection(m_ops);
   nsfdpy::ops::bindGradient(m_ops);
   nsfdpy::ops::bindLaplacian(m_ops);
 }

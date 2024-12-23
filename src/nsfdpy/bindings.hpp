@@ -26,6 +26,7 @@ void bindVector(py::module_ &m);
 }  // namespace field
 
 namespace ops {
+void bindAdvection(py::module_ &m);
 void bindGradient(py::module_ &m);
 void bindLaplacian(py::module_ &m);
 }  // namespace ops
