@@ -56,14 +56,14 @@ class CompRHS:
         self,
         FG: VectorField,
         delt: float,
-        output: npt.NDArray[np.float64] | None = None,
-    ) -> npt.NDArray[np.float64]:
+        output: ScalarField | None = None,
+    ) -> ScalarField:
 
         imax = self._grid.imax
         jmax = self._grid.jmax
 
         if output is None:
-            output = np.zeros((imax + 2, jmax + 2), dtype=np.float64)
+            output = ScalarField(imax, jmax)
 
         for i in range(1, imax + 1):
             for j in range(1, jmax + 1):

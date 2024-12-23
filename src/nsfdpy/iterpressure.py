@@ -2,9 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import numpy as np
-import numpy.typing as npt
 
-from copy import deepcopy
 from typing import cast
 
 from nsfdpy.field import ScalarField
@@ -20,16 +18,16 @@ class IterPressure:
         self._itermax = itermax
         self._eps = eps
 
-        self._rit = np.zeros((grid.imax + 2, grid.jmax + 2))
+        self._rit = ScalarField(grid.imax, grid.jmax)
 
         self._n_it = 0
 
     def __call__(
-        self, p: ScalarField, rhs: npt.NDArray[np.float64], overwrite: bool = True
+        self, p: ScalarField, rhs: ScalarField, overwrite: bool = True
     ) -> ScalarField:
 
         if not overwrite:
-            pit = deepcopy(p)
+            pit = ScalarField(p)
         else:
             pit = p
 
@@ -54,23 +52,21 @@ class IterPressure:
         self._n_it = it
         return pit
 
-    def _calc_norm(self, pit: ScalarField, rhs: npt.NDArray[np.float64]) -> float:
+    def _calc_norm(self, pit: ScalarField, rhs: ScalarField) -> float:
 
         rit = self._calc_rit(pit, rhs)
 
-        s = 0
+        s = 0.0
 
         for i in range(1, self._grid.imax + 1):
             for j in range(1, self._grid.jmax + 1):
-                s += rit[i, j] ** 2
+                s += float(rit[i, j]) ** 2
 
         l2_norm = cast(float, np.sqrt(s))
 
         return l2_norm
 
-    def _calc_rit(
-        self, pit: ScalarField, rhs: npt.NDArray[np.float64]
-    ) -> npt.NDArray[np.float64]:
+    def _calc_rit(self, pit: ScalarField, rhs: ScalarField) -> ScalarField:
 
         for i in range(1, self._grid.imax + 1):
             for j in range(1, self._grid.jmax + 1):

@@ -87,6 +87,7 @@ void bindScalar(py::module_ &m) {
       .def(py::init<size_t, size_t>())
       .def(py::init<size_t, size_t, double>())
       .def(py::init<size_t, size_t, nsfd::Scalar>())
+      .def(py::init<nsfd::field::Scalar>())
       .def("__getitem__", &__getitem__)
       .def("__setitem__", &__setitem__)
       .def_static("loadtxt", &loadtxt)
