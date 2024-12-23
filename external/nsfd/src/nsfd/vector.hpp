@@ -13,10 +13,6 @@
 
 namespace nsfd {
 
-namespace field {
-class Vector;
-}
-
 struct Vector {
   double x;
   double y;
@@ -74,6 +70,11 @@ struct Vector {
   friend Vector operator*(double l, const Vector& r) {
     return {l * r.x, l * r.y};
   }
+
+  /* division */
+  Vector operator/(const Scalar& r) const { return {this->x / r, this->y / r}; }
+
+  Vector operator/(const double r) const { return {this->x / r, this->y / r}; }
 
   double abs() { return std::sqrt(this->x * this->x + this->y * this->y); }
 };

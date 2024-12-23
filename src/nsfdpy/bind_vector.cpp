@@ -31,6 +31,7 @@ void bindVector(py::module_ &m) {
       .def(py::self + py::self)
       .def(py::self - py::self)
       .def(double() * py::self)
+      .def(py::self / double())
       .def_readwrite("x", &nsfd::Vector::x)
       .def_readwrite("y", &nsfd::Vector::y);
 }

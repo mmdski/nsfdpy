@@ -33,21 +33,14 @@ class VectorLaplacian:
 
     def __call__(self, i: int, j: int) -> Vector:
 
-        d2udx2 = (
-            self._u[i + 1, j].x - 2 * self._u[i, j].x + self._u[i - 1, j].x
+        dx2 = (
+            self._u[i + 1, j] - 2 * self._u[i, j] + self._u[i - 1, j]
         ) / self._grid.delx**2
-        d2udy2 = (
-            self._u[i, j + 1].x - 2 * self._u[i, j].x + self._u[i, j - 1].x
+        dy2 = (
+            self._u[i, j + 1] - 2 * self._u[i, j] + self._u[i, j - 1]
         ) / self._grid.dely**2
 
-        d2vdx2 = (
-            self._u[i + 1, j].y - 2 * self._u[i, j].y + self._u[i - 1, j].y
-        ) / self._grid.delx**2
-        d2vdy2 = (
-            self._u[i, j + 1].y - 2 * self._u[i, j].y + self._u[i, j - 1].y
-        ) / self._grid.dely**2
-
-        return Vector(d2udx2 + d2udy2, d2vdx2 + d2vdy2)
+        return dx2 + dy2
 
 
 class VectorAdvection:
