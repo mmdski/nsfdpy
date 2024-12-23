@@ -6,23 +6,12 @@ from typing import cast
 import numpy as np
 
 from nsfdpy import Vector
-from nsfdpy.field import ScalarField, VectorField
+from nsfdpy.field import VectorField
 from nsfdpy.grid import StaggeredGrid
 
+from nsfdpy._nsfd.ops import Gradient as ScalarGradient
 
-class ScalarGradient:
-
-    def __init__(self, grid: StaggeredGrid, p: ScalarField):
-        self._grid = grid
-        self._p = p
-
-    def __call__(self, i: int, j: int) -> Vector:
-
-        x = (self._p[i + 1, j] - self._p[i, j]) / self._grid.delx
-
-        y = (self._p[i, j + 1] - self._p[i, j]) / self._grid.dely
-
-        return Vector(x, y)
+__all__ = ["ScalarGradient"]
 
 
 class VectorLaplacian:

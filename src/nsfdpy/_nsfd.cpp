@@ -36,4 +36,8 @@ PYBIND11_MODULE(_nsfd, m) {
 
   nsfdpy::field::bindScalar(m_field);
   nsfdpy::field::bindVector(m_field);
+
+  auto m_ops = m.def_submodule("ops");
+
+  nsfdpy::ops::bindGradient(m_ops);
 }

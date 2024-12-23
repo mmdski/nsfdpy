@@ -5,11 +5,7 @@
  */
 #include <gtest/gtest.h>
 
-#include <nsfd/scalar.hpp>
-
-namespace {
-TEST(ScalarTest, init) { nsfd::Scalar s(10); }
-}  // namespace
+#include <nsfd/ops/gradient.hpp>
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);

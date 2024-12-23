@@ -49,6 +49,7 @@ target_sources(nsfd
   src/nsfd/grid/geom_data.hpp
   src/nsfd/grid/grid.hpp
   src/nsfd/grid/staggered_grid.hpp
+  src/nsfd/ops/gradient.hpp
 )
 
 if(nsfd_BUILD_TESTS)
@@ -71,6 +72,11 @@ if(nsfd_BUILD_TESTS)
   target_link_libraries(field.vector.test nsfd::nsfd GTest::gtest_main)
   gtest_add_tests(TARGET field.vector.test TEST_LIST field.vector.test-list)
   set_tests_properties(${field.vector.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+
+  add_executable(ops.gradient.test src/nsfd/ops/gradient.test.cpp)
+  target_link_libraries(ops.gradient.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET ops.gradient.test TEST_LIST ops.gradient.test-list)
+  set_tests_properties(${ops.gradient.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
 endif()
 
 if(nsfd_BUILD_EXAMPLES)

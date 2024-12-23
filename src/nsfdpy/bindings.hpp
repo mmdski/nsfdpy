@@ -24,6 +24,10 @@ namespace field {
 void bindScalar(py::module_ &m);
 void bindVector(py::module_ &m);
 }  // namespace field
+
+namespace ops {
+void bindGradient(py::module_ &m);
+}
 }  // namespace nsfdpy
 
 #endif
