@@ -9,27 +9,10 @@ from nsfdpy import Vector
 from nsfdpy.field import VectorField
 from nsfdpy.grid import StaggeredGrid
 
-from nsfdpy._nsfd.ops import Gradient as ScalarGradient
-
-__all__ = ["ScalarGradient"]
+from nsfdpy._nsfd.ops import Gradient as ScalarGradient, Laplacian as VectorLaplacian
 
 
-class VectorLaplacian:
-
-    def __init__(self, grid: StaggeredGrid, u: VectorField):
-        self._grid = grid
-        self._u = u
-
-    def __call__(self, i: int, j: int) -> Vector:
-
-        dx2 = (
-            self._u[i + 1, j] - 2 * self._u[i, j] + self._u[i - 1, j]
-        ) / self._grid.delx**2
-        dy2 = (
-            self._u[i, j + 1] - 2 * self._u[i, j] + self._u[i, j - 1]
-        ) / self._grid.dely**2
-
-        return dx2 + dy2
+__all__ = ["ScalarGradient", "VectorLaplacian"]
 
 
 class VectorAdvection:
