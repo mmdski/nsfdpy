@@ -14,6 +14,8 @@ namespace nsfdpy {
 void bindScalar(py::module_ &m);
 void bindVector(py::module_ &m);
 
+void bindIterPressure(py::module_ &m);
+
 namespace grid {
 void bindAxis(py::module_ &m);
 void bindGrid(py::module_ &m);

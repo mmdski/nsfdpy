@@ -17,6 +17,8 @@ PYBIND11_MODULE(_nsfd, m) {
   nsfdpy::bindScalar(m);
   nsfdpy::bindVector(m);
 
+  nsfdpy::bindIterPressure(m);
+
   auto m_grid = m.def_submodule("grid");
 
   nsfdpy::grid::bindAxis(m_grid);

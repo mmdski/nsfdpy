@@ -42,6 +42,7 @@ target_sources(nsfd
   FILES
   src/nsfd/scalar.hpp
   src/nsfd/vector.hpp
+  src/nsfd/iterpressure.hpp
   src/nsfd/field/field.hpp
   src/nsfd/grid/axis.hpp
   src/nsfd/grid/geom_data.hpp

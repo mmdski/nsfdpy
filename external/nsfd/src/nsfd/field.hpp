@@ -10,6 +10,8 @@
 #include <tuple>
 #include <vector>
 
+#include "grid/staggered_grid.hpp"
+
 namespace nsfd {
 template <typename T>
 class Field {
@@ -31,6 +33,10 @@ class Field {
         jmax_{std::get<1>(n_interior)},
         values_(
             ((std::get<0>(n_interior) + 2) * (std::get<1>(n_interior) + 2))) {}
+  Field(nsfd::grid::StaggeredGrid &grid)
+      : imax_{grid.imax()},
+        jmax_{grid.jmax()},
+        values_((grid.imax() + 2) * (grid.jmax() + 2)) {}
 
   T &operator()(size_t i, size_t j) {
     if (i > imax_ + 1) throw std::out_of_range("i is out of range");

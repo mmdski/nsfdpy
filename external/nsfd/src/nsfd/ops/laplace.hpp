@@ -24,23 +24,14 @@ class Laplace {
       : grid_{grid}, field_{field} {}
 
   T operator()(size_t i, size_t j) {
-    auto dx2 = (field_(i + 1, j) - 2 * field_(i, j) + field_(i - 1, j)) /
+    auto dx2 = (field_(i + 1, j) - 2.0 * field_(i, j) + field_(i - 1, j)) /
                (grid_.delx() * grid_.delx());
-    auto dy2 = (field_(i, j + 1) - 2 * field_(i, j) + field_(i, j - 1)) /
+    auto dy2 = (field_(i, j + 1) - 2.0 * field_(i, j) + field_(i, j - 1)) /
                (grid_.dely() * grid_.dely());
     return dx2 + dy2;
   }
 };
 
-Laplace<nsfd::Scalar> lap(nsfd::grid::StaggeredGrid &grid,
-                          nsfd::Field<nsfd::Scalar> &field) {
-  return Laplace<nsfd::Scalar>(grid, field);
-}
-
-Laplace<nsfd::Vector> lap(nsfd::grid::StaggeredGrid &grid,
-                          nsfd::Field<nsfd::Vector> &field) {
-  return Laplace<nsfd::Vector>(grid, field);
-}
 }  // namespace ops
 }  // namespace nsfd
 
