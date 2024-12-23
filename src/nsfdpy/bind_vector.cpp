@@ -26,6 +26,7 @@ void bindVector(py::module_ &m) {
   py::class_<nsfd::Vector>(m, "Vector")
       .def(py::init<double, double>(), py::arg("x") = 0, py::arg("y") = 0)
       .def(py::init<std::tuple<double, double>>())
+      .def(py::init<nsfd::Vector>())
       .def("__repr__", __repr__)
       .def(py::self + py::self)
       .def(py::self - py::self)
