@@ -4,7 +4,7 @@
 from nsfdpy._nsfd.ops import (
     Advection as VectorAdvection,
     Gradient as ScalarGradient,
-    Laplace as VectorLaplace,
+    VectorLaplace,
 )
 
 

@@ -14,9 +14,9 @@ namespace py = pybind11;
 namespace nsfdpy {
 namespace ops {
 void bindLaplace(py::module_ &m) {
-  py::class_<nsfd::ops::Laplace>(m, "Laplace")
+  py::class_<nsfd::ops::Laplace<nsfd::Vector>>(m, "VectorLaplace")
       .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::Field<nsfd::Vector> &>())
-      .def("__call__", &nsfd::ops::Laplace::operator());
+      .def("__call__", &nsfd::ops::Laplace<nsfd::Vector>::operator());
 }
 }  // namespace ops
 }  // namespace nsfdpy

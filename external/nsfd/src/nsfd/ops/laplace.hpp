@@ -8,20 +8,22 @@
 
 #include "../field.hpp"
 #include "../grid/staggered_grid.hpp"
+#include "../scalar.hpp"
 #include "../vector.hpp"
 
 namespace nsfd {
 namespace ops {
+template <typename T>
 class Laplace {
  private:
   nsfd::grid::StaggeredGrid &grid_;
-  nsfd::Field<nsfd::Vector> &field_;
+  nsfd::Field<T> &field_;
 
  public:
-  Laplace(nsfd::grid::StaggeredGrid &grid, nsfd::Field<nsfd::Vector> &field)
+  Laplace(nsfd::grid::StaggeredGrid &grid, nsfd::Field<T> &field)
       : grid_{grid}, field_{field} {}
 
-  nsfd::Vector operator()(size_t i, size_t j) {
+  T operator()(size_t i, size_t j) {
     auto dx2 = (field_(i + 1, j) - 2 * field_(i, j) + field_(i - 1, j)) /
                (grid_.delx() * grid_.delx());
     auto dy2 = (field_(i, j + 1) - 2 * field_(i, j) + field_(i, j - 1)) /
@@ -29,6 +31,16 @@ class Laplace {
     return dx2 + dy2;
   }
 };
+
+Laplace<nsfd::Scalar> lap(nsfd::grid::StaggeredGrid &grid,
+                          nsfd::Field<nsfd::Scalar> &field) {
+  return Laplace<nsfd::Scalar>(grid, field);
+}
+
+Laplace<nsfd::Vector> lap(nsfd::grid::StaggeredGrid &grid,
+                          nsfd::Field<nsfd::Vector> &field) {
+  return Laplace<nsfd::Vector>(grid, field);
+}
 }  // namespace ops
 }  // namespace nsfd
 
