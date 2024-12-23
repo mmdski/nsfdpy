@@ -5,10 +5,13 @@
  */
 #include <gtest/gtest.h>
 
-#include <nsfd/field/vector.hpp>
+#include <nsfd/field.hpp>
+#include <nsfd/vector.hpp>
 
 namespace {
-TEST(FieldVectorTest, init) { nsfd::field::Vector sf = nsfd::field::Vector(); }
+TEST(FieldVectorTest, init) {
+  nsfd::Field<nsfd::Vector> sf = nsfd::Field<nsfd::Vector>();
+}
 }  // namespace
 
 int main(int argc, char** argv) {

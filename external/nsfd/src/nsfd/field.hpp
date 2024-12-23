@@ -11,8 +11,7 @@
 #include <vector>
 
 namespace nsfd {
-namespace field {
-template <typename T, typename D>
+template <typename T>
 class Field {
  private:
   size_t imax_;
@@ -56,7 +55,7 @@ class Field {
   std::tuple<size_t, size_t> n_interior() const { return {imax_, jmax_}; }
   std::tuple<size_t, size_t> shape() const { return {imax_ + 2, jmax_ + 2}; }
 };
-}  // namespace field
+
 }  // namespace nsfd
 
 #endif

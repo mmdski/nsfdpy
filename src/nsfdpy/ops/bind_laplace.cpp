@@ -7,6 +7,7 @@
 
 namespace py = pybind11;
 
+#include <nsfd/field.hpp>
 #include <nsfd/ops/laplace.hpp>
 #include <nsfd/vector.hpp>
 
@@ -14,7 +15,7 @@ namespace nsfdpy {
 namespace ops {
 void bindLaplace(py::module_ &m) {
   py::class_<nsfd::ops::Laplace>(m, "Laplace")
-      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::field::Vector &>())
+      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::Field<nsfd::Vector> &>())
       .def("__call__", &nsfd::ops::Laplace::operator());
 }
 }  // namespace ops

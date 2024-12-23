@@ -5,7 +5,7 @@
  */
 #include <pybind11/pybind11.h>
 
-#include <nsfd/field/scalar.hpp>
+#include <nsfd/field.hpp>
 #include <nsfd/grid/staggered_grid.hpp>
 #include <nsfd/ops/gradient.hpp>
 
@@ -15,7 +15,7 @@ namespace nsfdpy {
 namespace ops {
 void bindGradient(py::module_ &m) {
   py::class_<nsfd::ops::Gradient>(m, "Gradient")
-      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::field::Scalar &>())
+      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::Field<nsfd::Scalar> &>())
       .def("__call__", &nsfd::ops::Gradient::operator());
 }
 

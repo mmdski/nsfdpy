@@ -6,8 +6,9 @@
 #ifndef NSFD_OPS_GRADIENT_HPP_
 #define NSFD_OPS_GRADIENT_HPP_
 
-#include "../field/scalar.hpp"
+#include "../field.hpp"
 #include "../grid/staggered_grid.hpp"
+#include "../scalar.hpp"
 #include "../vector.hpp"
 
 namespace nsfd {
@@ -16,10 +17,10 @@ namespace ops {
 class Gradient {
  private:
   nsfd::grid::StaggeredGrid &grid_;
-  nsfd::field::Scalar &field_;
+  nsfd::Field<nsfd::Scalar> &field_;
 
  public:
-  Gradient(nsfd::grid::StaggeredGrid &grid, nsfd::field::Scalar &field)
+  Gradient(nsfd::grid::StaggeredGrid &grid, nsfd::Field<nsfd::Scalar> &field)
       : grid_{grid}, field_{field} {}
 
   nsfd::Vector operator()(size_t i, size_t j) {

@@ -6,18 +6,19 @@
 #ifndef NSFD_OPS_LAPLACE_HPP_
 #define NSFD_OPS_LAPLACE_HPP_
 
-#include "../field/vector.hpp"
+#include "../field.hpp"
 #include "../grid/staggered_grid.hpp"
+#include "../vector.hpp"
 
 namespace nsfd {
 namespace ops {
 class Laplace {
  private:
   nsfd::grid::StaggeredGrid &grid_;
-  nsfd::field::Vector &field_;
+  nsfd::Field<nsfd::Vector> &field_;
 
  public:
-  Laplace(nsfd::grid::StaggeredGrid &grid, nsfd::field::Vector &field)
+  Laplace(nsfd::grid::StaggeredGrid &grid, nsfd::Field<nsfd::Vector> &field)
       : grid_{grid}, field_{field} {}
 
   nsfd::Vector operator()(size_t i, size_t j) {

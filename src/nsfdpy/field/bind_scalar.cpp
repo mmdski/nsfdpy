@@ -6,24 +6,25 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-#include <nsfd/field/scalar.hpp>
+#include <nsfd/field.hpp>
+#include <nsfd/scalar.hpp>
 
 namespace py = pybind11;
 
 namespace {
 py::module np = py::module::import("numpy");
 
-nsfd::Scalar __getitem__(nsfd::field::Scalar &self,
+nsfd::Scalar __getitem__(nsfd::Field<nsfd::Scalar> &self,
                          std::tuple<size_t, size_t> idx) {
   return self(std::get<0>(idx), std::get<1>(idx));
 }
 
-void __setitem__(nsfd::field::Scalar &self, std::tuple<size_t, size_t> idx,
-                 double s) {
+void __setitem__(nsfd::Field<nsfd::Scalar> &self,
+                 std::tuple<size_t, size_t> idx, double s) {
   self(std::get<0>(idx), std::get<1>(idx)) = nsfd::Scalar(s);
 }
 
-nsfd::field::Scalar *loadtxt(const std::string &filename) {
+nsfd::Field<nsfd::Scalar> *loadtxt(const std::string &filename) {
   py::object dtype = np.attr("float64");
   py::array s = np.attr("loadtxt")(py::str(filename), py::arg("dtype") = dtype,
                                    py::arg("ndmin") = 2);
@@ -36,7 +37,8 @@ nsfd::field::Scalar *loadtxt(const std::string &filename) {
   size_t n_i = static_cast<size_t>(shape[0]);
   size_t n_j = static_cast<size_t>(shape[1]);
 
-  nsfd::field::Scalar *sf = new nsfd::field::Scalar(n_i - 2, n_j - 2);
+  nsfd::Field<nsfd::Scalar> *sf =
+      new nsfd::Field<nsfd::Scalar>(n_i - 2, n_j - 2);
   const double *s_data = static_cast<const double *>(s.data());
 
   for (size_t i = 0; i < n_i; ++i) {
@@ -48,11 +50,11 @@ nsfd::field::Scalar *loadtxt(const std::string &filename) {
   return sf;
 }
 
-nsfd::field::Scalar *new_like(nsfd::field::Scalar &self) {
-  return new nsfd::field::Scalar(self.n_interior());
+nsfd::Field<nsfd::Scalar> *new_like(nsfd::Field<nsfd::Scalar> &self) {
+  return new nsfd::Field<nsfd::Scalar>(self.n_interior());
 }
 
-void savetxt(nsfd::field::Scalar &self, const std::string &filename) {
+void savetxt(nsfd::Field<nsfd::Scalar> &self, const std::string &filename) {
   auto [n_i, n_j] = self.shape();
   py::array_t<double> s({n_i, n_j});
   auto s_buf = s.mutable_unchecked<2>();
@@ -66,7 +68,7 @@ void savetxt(nsfd::field::Scalar &self, const std::string &filename) {
   np.attr("savetxt")(filename, s);
 }
 
-py::array_t<double> values(nsfd::field::Scalar &self) {
+py::array_t<double> values(nsfd::Field<nsfd::Scalar> &self) {
   auto [n_i, n_j] = self.shape();
   py::array_t<double> s({n_i, n_j});
   auto s_buf = s.mutable_unchecked<2>();
@@ -83,18 +85,18 @@ py::array_t<double> values(nsfd::field::Scalar &self) {
 namespace nsfdpy {
 namespace field {
 void bindScalar(py::module_ &m) {
-  py::class_<nsfd::field::Scalar>(m, "ScalarField")
+  py::class_<nsfd::Field<nsfd::Scalar>>(m, "ScalarField")
       .def(py::init<size_t, size_t>())
       .def(py::init<size_t, size_t, double>())
       .def(py::init<size_t, size_t, nsfd::Scalar>())
-      .def(py::init<nsfd::field::Scalar>())
+      .def(py::init<nsfd::Field<nsfd::Scalar>>())
       .def("__getitem__", &__getitem__)
       .def("__setitem__", &__setitem__)
       .def_static("loadtxt", &loadtxt)
-      .def("max_abs", &nsfd::field::Scalar::max_abs)
+      .def("max_abs", &nsfd::Field<nsfd::Scalar>::max_abs)
       .def("new_like", &new_like)
       .def("savetxt", &savetxt)
-      .def("shape", &nsfd::field::Scalar::shape)
+      .def("shape", &nsfd::Field<nsfd::Scalar>::shape)
       .def_property_readonly("values", &values);
 }
 }  // namespace field

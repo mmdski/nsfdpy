@@ -8,8 +8,9 @@
 
 #include <cmath>
 
-#include "../field/vector.hpp"
+#include "../field.hpp"
 #include "../grid/staggered_grid.hpp"
+#include "../vector.hpp"
 
 namespace nsfd {
 namespace ops {
@@ -17,8 +18,8 @@ class Advection {
  private:
   nsfd::grid::StaggeredGrid &grid_;
   double gamma_;
-  nsfd::field::Vector &a_;
-  nsfd::field::Vector &u_;
+  nsfd::Field<nsfd::Vector> &a_;
+  nsfd::Field<nsfd::Vector> &u_;
 
   double x_component(size_t i, size_t j) {
     double kr_u = (u_(i, j).x + u_(i + 1, j).x) / 2.0;
@@ -69,7 +70,8 @@ class Advection {
 
  public:
   Advection(nsfd::grid::StaggeredGrid &grid, double gamma,
-            nsfd::field::Vector &field, nsfd::field::Vector &velocity)
+            nsfd::Field<nsfd::Vector> &field,
+            nsfd::Field<nsfd::Vector> &velocity)
       : grid_{grid}, gamma_{gamma}, a_{field}, u_{velocity} {}
 
   nsfd::Vector operator()(size_t i, size_t j) {

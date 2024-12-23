@@ -43,8 +43,6 @@ target_sources(nsfd
   src/nsfd/scalar.hpp
   src/nsfd/vector.hpp
   src/nsfd/field/field.hpp
-  src/nsfd/field/scalar.hpp
-  src/nsfd/field/vector.hpp
   src/nsfd/grid/axis.hpp
   src/nsfd/grid/geom_data.hpp
   src/nsfd/grid/grid.hpp

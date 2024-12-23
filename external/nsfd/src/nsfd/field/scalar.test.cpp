@@ -5,10 +5,13 @@
  */
 #include <gtest/gtest.h>
 
-#include <nsfd/field/scalar.hpp>
+#include <nsfd/field.hpp>
+#include <nsfd/scalar.hpp>
 
 namespace {
-TEST(FieldScalarTest, init) { nsfd::field::Scalar sf = nsfd::field::Scalar(); }
+TEST(FieldScalarTest, init) {
+  nsfd::Field<nsfd::Scalar> sf = nsfd::Field<nsfd::Scalar>();
+}
 }  // namespace
 
 int main(int argc, char** argv) {
