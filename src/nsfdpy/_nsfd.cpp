@@ -19,16 +19,20 @@ PYBIND11_MODULE(_nsfd, m) {
 
   nsfdpy::bindIterPressure(m);
 
-  auto m_grid = m.def_submodule("grid");
+  auto m_comp = m.def_submodule("comp");
 
-  nsfdpy::grid::bindAxis(m_grid);
-  nsfdpy::grid::bindGrid(m_grid);
-  nsfdpy::grid::bindStaggeredGrid(m_grid);
+  nsfdpy::comp::bindFG(m_comp);
 
   auto m_field = m.def_submodule("field");
 
   nsfdpy::field::bindScalar(m_field);
   nsfdpy::field::bindVector(m_field);
+
+  auto m_grid = m.def_submodule("grid");
+
+  nsfdpy::grid::bindAxis(m_grid);
+  nsfdpy::grid::bindGrid(m_grid);
+  nsfdpy::grid::bindStaggeredGrid(m_grid);
 
   auto m_ops = m.def_submodule("ops");
 

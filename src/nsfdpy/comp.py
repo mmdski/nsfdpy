@@ -6,44 +6,10 @@ import numpy.typing as npt
 
 from nsfdpy import Vector
 from nsfdpy.field import ScalarField, VectorField
-from nsfdpy.ops import ScalarGradient, VectorAdvection, VectorLaplace
+from nsfdpy.ops import ScalarGradient
 from nsfdpy.grid import StaggeredGrid
 
-
-class CompFG:
-
-    def __init__(
-        self, grid: StaggeredGrid, g: tuple[float, float], Re: float, gamma: float
-    ):
-
-        self._grid = grid
-        self._g = Vector(g)
-        self._Re = Re
-
-        self._gamma = gamma
-
-    def __call__(self, u: VectorField, delt: float) -> VectorField:
-
-        lap = VectorLaplace(self._grid, u)
-        adv = VectorAdvection(self._grid, self._gamma, u, u)
-
-        FG = u.new_like()
-
-        for i in range(1, self._grid.imax + 1):
-            for j in range(1, self._grid.jmax + 1):
-                FG[i, j] = u[i, j] + delt * (
-                    self._g + 1 / self._Re * (lap(i, j) - adv(i, j))
-                )
-
-        for j in range(1, self._grid.jmax + 1):
-            FG[0, j].x = u[0, j].x
-            FG[self._grid.imax, j].x = u[self._grid.imax, j].x
-
-        for i in range(1, self._grid.imax + 1):
-            FG[i, 0].y = u[i, 0].y
-            FG[i, self._grid.jmax].y = u[i, self._grid.jmax].y
-
-        return FG
+from nsfdpy._nsfd.comp import FG as CompFG
 
 
 class CompRHS:
@@ -92,3 +58,6 @@ class CompUNextTime:
     def __call__(self, i: int, j: int) -> Vector:
 
         return self._fg[i, j] - self._delt * self._grad_p(i, j)
+
+
+__all__ = ["CompFG"]

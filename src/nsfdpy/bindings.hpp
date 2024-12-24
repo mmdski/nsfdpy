@@ -16,16 +16,20 @@ void bindVector(py::module_ &m);
 
 void bindIterPressure(py::module_ &m);
 
-namespace grid {
-void bindAxis(py::module_ &m);
-void bindGrid(py::module_ &m);
-void bindStaggeredGrid(py::module_ &m);
-}  // namespace grid
+namespace comp {
+void bindFG(py::module_ &m);
+}
 
 namespace field {
 void bindScalar(py::module_ &m);
 void bindVector(py::module_ &m);
 }  // namespace field
+
+namespace grid {
+void bindAxis(py::module_ &m);
+void bindGrid(py::module_ &m);
+void bindStaggeredGrid(py::module_ &m);
+}  // namespace grid
 
 namespace ops {
 void bindAdvection(py::module_ &m);
