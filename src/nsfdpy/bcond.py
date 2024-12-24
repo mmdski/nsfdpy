@@ -28,6 +28,20 @@ class NoSlipWBCond(BCond):
             u[0, j].y = -u[1, j].y
 
 
+class PeriodicWBCond(BCond):
+
+    def __init__(self, grid: StaggeredGrid):
+
+        self._grid = grid
+
+    def __call__(self, u: VectorField, p: ScalarField) -> None:
+
+        for j in range(1, self._grid.jmax + 1):
+            u[0, j] = u[self._grid.imax - 1, j]
+            u[1, j].y = u[self._grid.imax, j].y
+            p[1, j] = p[self._grid.imax, j]
+
+
 class NoSlipEBCond(BCond):
 
     def __init__(self, grid: StaggeredGrid):
@@ -39,6 +53,19 @@ class NoSlipEBCond(BCond):
         for j in range(1, self._grid.jmax + 1):
             u[self._grid.imax, j].x = 0
             u[self._grid.imax + 1, j].y = -u[self._grid.imax, j].y
+
+
+class PeriodicEBCond(BCond):
+
+    def __init__(self, grid: StaggeredGrid):
+
+        self._grid = grid
+
+    def __call__(self, u: VectorField, p: ScalarField) -> None:
+
+        for j in range(1, self._grid.jmax + 1):
+            u[self._grid.imax, j].x = u[1, j].x
+            u[self._grid.imax + 1, j].y = u[2, j].y
 
 
 class NoSlipNBCond(BCond):

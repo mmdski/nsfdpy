@@ -61,8 +61,10 @@
     "Werror",
     "Wextra",
     "xfrac",
+    "xlabel",
     "xlength",
     "yfrac",
+    "ylabel",
     "ylength"
   ],
   "notebook.lineNumbers": "on",
