@@ -18,6 +18,8 @@ pybind11_add_module(_nsfd
     src/nsfdpy/bind_vector.cpp
     src/nsfdpy/bind_iterpressure.cpp
     src/nsfdpy/comp/bind_fg.cpp
+    src/nsfdpy/comp/bind_rhs.cpp
+    src/nsfdpy/comp/bind_u_next.cpp
     src/nsfdpy/field/bind_scalar.cpp
     src/nsfdpy/field/bind_vector.cpp
     src/nsfdpy/grid/bind_axis.cpp

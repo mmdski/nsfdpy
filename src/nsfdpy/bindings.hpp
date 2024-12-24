@@ -18,7 +18,9 @@ void bindIterPressure(py::module_ &m);
 
 namespace comp {
 void bindFG(py::module_ &m);
-}
+void bindRHS(py::module_ &m);
+void bindUNext(py::module_ &m);
+}  // namespace comp
 
 namespace field {
 void bindScalar(py::module_ &m);

@@ -43,12 +43,15 @@ target_sources(nsfd
   src/nsfd/scalar.hpp
   src/nsfd/vector.hpp
   src/nsfd/iterpressure.hpp
+  src/nsfd/comp/fg.hpp
+  src/nsfd/comp/rhs.hpp
   src/nsfd/field/field.hpp
   src/nsfd/grid/axis.hpp
   src/nsfd/grid/geom_data.hpp
   src/nsfd/grid/grid.hpp
   src/nsfd/grid/staggered_grid.hpp
   src/nsfd/ops/advection.hpp
+  src/nsfd/ops/divergence.hpp
   src/nsfd/ops/gradient.hpp
   src/nsfd/ops/laplace.hpp
 )

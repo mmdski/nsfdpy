@@ -22,6 +22,8 @@ PYBIND11_MODULE(_nsfd, m) {
   auto m_comp = m.def_submodule("comp");
 
   nsfdpy::comp::bindFG(m_comp);
+  nsfdpy::comp::bindRHS(m_comp);
+  nsfdpy::comp::bindUNext(m_comp);
 
   auto m_field = m.def_submodule("field");
 
