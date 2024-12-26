@@ -17,9 +17,8 @@ void bindVector(py::module_ &m);
 void bindIterPressure(py::module_ &m);
 
 namespace bcond {
-void bindApplyBCond(py::module_ &m);
-void bindBCType(py::module_ &m);
-void bindBCData(py::module_ &m);
+void bindApply(py::module_ &m);
+void bindData(py::module_ &m);
 }  // namespace bcond
 
 namespace comp {

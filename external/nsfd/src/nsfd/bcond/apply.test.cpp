@@ -5,7 +5,7 @@
  */
 #include <gtest/gtest.h>
 
-#include <nsfd/bcond.hpp>
+#include <nsfd/bcond/apply.hpp>
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);

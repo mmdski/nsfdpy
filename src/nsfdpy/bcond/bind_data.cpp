@@ -5,18 +5,19 @@
  */
 #include <pybind11/pybind11.h>
 
-#include <nsfd/bcond.hpp>
-#include <nsfd/grid/staggered_grid.hpp>
+#include <nsfd/bcond/data.hpp>
 
 namespace py = pybind11;
 
 namespace nsfdpy {
 namespace bcond {
-void bindApplyBCond(py::module_ &m) {
-  py::class_<nsfd::ApplyBCond>(m, "ApplyBCond")
-      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::BCData, nsfd::BCData,
-                    nsfd::BCData, nsfd::BCData>())
-      .def("__call__", &nsfd::ApplyBCond::operator());
+void bindData(py::module_ &m) {
+  py::enum_<nsfd::bcond::Type>(m, "Type").value("NoSlip",
+                                                nsfd::bcond::Type::NoSlip);
+
+  py::class_<nsfd::bcond::Data>(m, "Data")
+      .def(py::init<nsfd::bcond::Type>())
+      .def(py::init<nsfd::bcond::Type, double>());
 }
 }  // namespace bcond
 }  // namespace nsfdpy

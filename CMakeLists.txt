@@ -17,9 +17,8 @@ pybind11_add_module(_nsfd
     src/nsfdpy/bind_scalar.cpp
     src/nsfdpy/bind_vector.cpp
     src/nsfdpy/bind_iterpressure.cpp
-    src/nsfdpy/bcond/bind_apply_bcond.cpp
-    src/nsfdpy/bcond/bind_bc_data.cpp
-    src/nsfdpy/bcond/bind_bc_type.cpp
+    src/nsfdpy/bcond/bind_apply.cpp
+    src/nsfdpy/bcond/bind_data.cpp
     src/nsfdpy/comp/bind_fg.cpp
     src/nsfdpy/comp/bind_rhs.cpp
     src/nsfdpy/comp/bind_u_next.cpp

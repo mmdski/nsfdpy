@@ -6,31 +6,12 @@
 #ifndef NSFD_BCOND_BCOND_HPP_
 #define NSFD_BCOND_BCOND_HPP_
 
-#include <memory>
-#include <optional>
-
-#include "field.hpp"
-#include "grid/staggered_grid.hpp"
-#include "scalar.hpp"
-#include "vector.hpp"
+#include "../field.hpp"
+#include "../scalar.hpp"
+#include "../vector.hpp"
 
 namespace nsfd {
-
-enum class BCType { NoSlip };
-
-struct BCData {
- private:
-  BCType type_;
-  std::optional<double> data_;
-
- public:
-  BCData(BCType type) : type_{type}, data_{std::nullopt} {}
-  BCData(BCType type, double value) : type_{type}, data_{value} {}
-
-  std::optional<double> data() { return data_; }
-  BCType type() { return type_; }
-};
-
+namespace bcond {
 class BCond {
  public:
   virtual ~BCond() = default;
@@ -150,54 +131,7 @@ class NoSlipWBCond : public WBCond {
     }
   }
 };
-
-class ApplyBCond {
- private:
-  std::unique_ptr<NBCond> n_bcond_;
-  std::unique_ptr<SBCond> s_bcond_;
-  std::unique_ptr<EBCond> e_bcond_;
-  std::unique_ptr<WBCond> w_bcond_;
-
- public:
-  ApplyBCond(nsfd::grid::StaggeredGrid &grid, BCData n_bc, BCData s_bc,
-             BCData e_bc, BCData w_bc) {
-    switch (n_bc.type()) {
-      case BCType::NoSlip:
-        n_bcond_ =
-            std::make_unique<NoSlipNBCond>(grid, n_bc.data().value_or(0));
-        break;
-    }
-
-    switch (s_bc.type()) {
-      case BCType::NoSlip:
-        s_bcond_ =
-            std::make_unique<NoSlipSBCond>(grid, s_bc.data().value_or(0));
-        break;
-    }
-
-    switch (e_bc.type()) {
-      case BCType::NoSlip:
-        e_bcond_ =
-            std::make_unique<NoSlipEBCond>(grid, e_bc.data().value_or(0));
-        break;
-    }
-
-    switch (w_bc.type()) {
-      case BCType::NoSlip:
-        w_bcond_ =
-            std::make_unique<NoSlipWBCond>(grid, w_bc.data().value_or(0));
-        break;
-    }
-  }
-
-  void operator()(nsfd::Field<nsfd::Vector> &u, nsfd::Field<nsfd::Scalar> &p) {
-    n_bcond_->operator()(u, p);
-    s_bcond_->operator()(u, p);
-    e_bcond_->operator()(u, p);
-    w_bcond_->operator()(u, p);
-  }
-};
-
+}  // namespace bcond
 }  // namespace nsfd
 
 #endif

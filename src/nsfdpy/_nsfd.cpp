@@ -20,9 +20,8 @@ PYBIND11_MODULE(_nsfd, m) {
   nsfdpy::bindIterPressure(m);
 
   auto m_bcond = m.def_submodule("bcond");
-  nsfdpy::bcond::bindApplyBCond(m_bcond);
-  nsfdpy::bcond::bindBCData(m_bcond);
-  nsfdpy::bcond::bindBCType(m_bcond);
+  nsfdpy::bcond::bindApply(m_bcond);
+  nsfdpy::bcond::bindData(m_bcond);
 
   auto m_comp = m.def_submodule("comp");
 
