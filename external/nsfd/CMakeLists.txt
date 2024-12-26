@@ -40,9 +40,10 @@ target_sources(nsfd
   FILE_SET HEADERS
   BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src
   FILES
+  src/nsfd/bcond.hpp
+  src/nsfd/iterpressure.hpp
   src/nsfd/scalar.hpp
   src/nsfd/vector.hpp
-  src/nsfd/iterpressure.hpp
   src/nsfd/comp/fg.hpp
   src/nsfd/comp/rhs.hpp
   src/nsfd/field/field.hpp
@@ -57,6 +58,11 @@ target_sources(nsfd
 )
 
 if(nsfd_BUILD_TESTS)
+  add_executable(bcond.test src/nsfd/bcond.test.cpp)
+  target_link_libraries(bcond.test nsfd::nsfd GTest::gtest_main)
+  gtest_add_tests(TARGET bcond.test TEST_LIST bcond.test-list)
+  set_tests_properties(${bcond.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+
   add_executable(scalar.test src/nsfd/scalar.test.cpp)
   target_link_libraries(scalar.test nsfd::nsfd GTest::gtest_main)
   gtest_add_tests(TARGET scalar.test TEST_LIST scalar.test-list)
