@@ -1,0 +1,30 @@
+geometry:
+  imax: 25
+  jmax: 25
+  xlength: 1.0
+  ylength: 1.0
+time:
+  delt: 0.02
+solver:
+  itermax: 1000
+  eps: 0.001
+  omg: 1.7
+  gamma: 0.9
+constants:
+  Re: 1000
+  GX: 0.0
+  GY: 0.0
+initial:
+  UI: 0.0
+  VI: 0.0
+  PI: 0.0
+boundary:
+  north:
+    type: no slip
+    value: 1
+  south:
+    type: no slip
+  east:
+    type: no slip
+  west:
+    type: no slip
