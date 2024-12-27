@@ -14,6 +14,7 @@ set(PYBIND11_NEWPYTHON ON)
 find_package(pybind11 CONFIG REQUIRED)
 pybind11_add_module(_nsfd
     src/nsfdpy/_nsfd.cpp
+    src/nsfdpy/bind_config.cpp
     src/nsfdpy/bind_scalar.cpp
     src/nsfdpy/bind_vector.cpp
     src/nsfdpy/bind_iterpressure.cpp

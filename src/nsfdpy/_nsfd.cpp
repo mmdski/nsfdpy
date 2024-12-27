@@ -3,15 +3,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-#include <iostream>
-#include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
 #include "bindings.hpp"
 
 namespace py = pybind11;
-
-py::module np = py::module::import("numpy");
 
 PYBIND11_MODULE(_nsfd, m) {
   nsfdpy::bindScalar(m);
@@ -28,6 +24,10 @@ PYBIND11_MODULE(_nsfd, m) {
   nsfdpy::comp::bindFG(m_comp);
   nsfdpy::comp::bindRHS(m_comp);
   nsfdpy::comp::bindUNext(m_comp);
+
+  auto m_config = m.def_submodule("config");
+
+  nsfdpy::config::bindConfig(m_config);
 
   auto m_field = m.def_submodule("field");
 

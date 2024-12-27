@@ -27,6 +27,10 @@ void bindRHS(py::module_ &m);
 void bindUNext(py::module_ &m);
 }  // namespace comp
 
+namespace config {
+void bindConfig(py::module_ &m);
+}
+
 namespace field {
 void bindScalar(py::module_ &m);
 void bindVector(py::module_ &m);
