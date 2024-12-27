@@ -6,6 +6,9 @@
 #ifndef NSFD_BCOND_APPLY_HPP_
 #define NSFD_BCOND_APPLY_HPP_
 
+#include <memory>
+
+#include "../config.hpp"
 #include "../grid/staggered_grid.hpp"
 #include "bcond.hpp"
 #include "data.hpp"
@@ -51,6 +54,9 @@ class Apply {
         break;
     }
   }
+
+  Apply(nsfd::grid::StaggeredGrid &grid, nsfd::config::BoundaryCond &bcond)
+      : Apply(grid, bcond.n, bcond.s, bcond.e, bcond.w) {}
 
   void operator()(nsfd::Field<nsfd::Vector> &u, nsfd::Field<nsfd::Scalar> &p) {
     n_bcond_->operator()(u, p);

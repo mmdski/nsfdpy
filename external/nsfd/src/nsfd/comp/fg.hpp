@@ -6,6 +6,7 @@
 #ifndef NSFD_COMP_FG_HPP_
 #define NSFD_COMP_FG_HPP_
 
+#include "../config.hpp"
 #include "../field.hpp"
 #include "../grid/staggered_grid.hpp"
 #include "../ops/advection.hpp"
@@ -24,6 +25,10 @@ class FG {
  public:
   FG(nsfd::grid::StaggeredGrid &grid, nsfd::Vector g, double Re, double gamma)
       : grid_{grid}, g_{g}, Re_{Re}, gamma_{gamma} {}
+
+  FG(nsfd::grid::StaggeredGrid &grid, nsfd::config::Constants &constants,
+     nsfd::config::Solver &solver)
+      : FG(grid, {constants.gx, constants.gy}, constants.Re, solver.gamma) {}
 
   void operator()(nsfd::Field<nsfd::Vector> &u, double delt,
                   nsfd::Field<nsfd::Vector> &fg) {

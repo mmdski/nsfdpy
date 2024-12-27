@@ -10,6 +10,7 @@
 #include <optional>
 
 #include "bcond/data.hpp"
+#include "vector.hpp"
 
 namespace nsfd {
 namespace config {
@@ -49,6 +50,9 @@ struct InitialCond {
   double VI;
 
   InitialCond(double PI, double UI, double VI) : PI{PI}, UI{UI}, VI{VI} {}
+
+  nsfd::Scalar p() { return PI; }
+  nsfd::Vector u() { return {UI, VI}; }
 };
 
 struct Solver {

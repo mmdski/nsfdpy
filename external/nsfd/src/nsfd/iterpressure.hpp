@@ -9,6 +9,7 @@
 #include <cmath>
 #include <tuple>
 
+#include "config.hpp"
 #include "field.hpp"
 #include "grid/staggered_grid.hpp"
 #include "ops/laplace.hpp"
@@ -63,6 +64,8 @@ class IterPressure {
   IterPressure(nsfd::grid::StaggeredGrid &grid, double omg, int itermax,
                double eps)
       : grid_{grid}, omg_{omg}, itermax_{itermax}, eps_{eps}, rit_(grid) {}
+  IterPressure(nsfd::grid::StaggeredGrid &grid, nsfd::config::Solver &solver)
+      : IterPressure(grid, solver.omg, solver.itermax, solver.eps) {}
 
   std::tuple<int, double> operator()(nsfd::Field<nsfd::Scalar> &pit,
                                      const nsfd::Field<nsfd::Scalar> &rhs) {

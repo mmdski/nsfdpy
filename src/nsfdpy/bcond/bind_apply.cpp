@@ -17,6 +17,8 @@ void bindApply(py::module_ &m) {
   py::class_<nsfd::bcond::Apply>(m, "Apply")
       .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::bcond::Data,
                     nsfd::bcond::Data, nsfd::bcond::Data, nsfd::bcond::Data>())
+      .def(
+          py::init<nsfd::grid::StaggeredGrid &, nsfd::config::BoundaryCond &>())
       .def("__call__", &nsfd::bcond::Apply::operator());
 }
 }  // namespace bcond

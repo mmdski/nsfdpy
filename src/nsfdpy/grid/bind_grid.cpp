@@ -12,8 +12,6 @@ namespace py = pybind11;
 
 namespace {
 
-py::module np = py::module::import("numpy");
-
 nsfd::grid::Grid *__init__(const py::dict &geom_data, double xfrac = 1,
                            double yfrac = 1) {
   return new nsfd::grid::Grid(geom_data["xlength"].cast<double>(),
@@ -35,7 +33,7 @@ py::tuple meshgrid(const nsfd::grid::Grid &self) {
   }
   return py::make_tuple(X, Y);
 }
-} // namespace
+}  // namespace
 
 namespace nsfdpy {
 namespace grid {
@@ -48,5 +46,5 @@ void bindGrid(py::module_ &m) {
       .def_readonly("y", &nsfd::grid::Grid::y)
       .def("meshgrid", meshgrid);
 }
-} // namespace grid
-} // namespace nsfdpy
+}  // namespace grid
+}  // namespace nsfdpy

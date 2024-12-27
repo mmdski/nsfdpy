@@ -5,6 +5,7 @@
  */
 #include <pybind11/pybind11.h>
 
+#include <nsfd/config.hpp>
 #include <nsfd/grid/staggered_grid.hpp>
 
 namespace py = pybind11;
@@ -26,7 +27,7 @@ py::dict geom_data(const nsfd::grid::StaggeredGrid &self) {
   return py_geom_data;
 }
 
-} // namespace
+}  // namespace
 
 namespace nsfdpy {
 namespace grid {
@@ -34,6 +35,7 @@ namespace grid {
 void bindStaggeredGrid(py::module_ &m) {
   py::class_<nsfd::grid::StaggeredGrid>(m, "StaggeredGrid")
       .def(py::init(&__init__))
+      .def(py::init<nsfd::config::Geometry &>())
       .def_readonly("p", &nsfd::grid::StaggeredGrid::p)
       .def_readonly("u", &nsfd::grid::StaggeredGrid::u)
       .def_readonly("v", &nsfd::grid::StaggeredGrid::v)
@@ -43,5 +45,5 @@ void bindStaggeredGrid(py::module_ &m) {
       .def_property_readonly("jmax", &nsfd::grid::StaggeredGrid::jmax)
       .def_property_readonly("geom_data", &geom_data);
 }
-} // namespace grid
-} // namespace nsfdpy
+}  // namespace grid
+}  // namespace nsfdpy

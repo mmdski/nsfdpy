@@ -37,6 +37,12 @@ class Field {
       : imax_{grid.imax()},
         jmax_{grid.jmax()},
         values_((grid.imax() + 2) * (grid.jmax() + 2)) {}
+  Field(nsfd::grid::StaggeredGrid &grid, T initial_value)
+      : imax_{grid.imax()},
+        jmax_{grid.jmax()},
+        values_((grid.imax() + 2) * (grid.jmax() + 2)) {
+    for (auto &u : values_) u = initial_value;
+  }
 
   T &operator()(size_t i, size_t j) {
     if (i > imax_ + 1) throw std::out_of_range("i is out of range");

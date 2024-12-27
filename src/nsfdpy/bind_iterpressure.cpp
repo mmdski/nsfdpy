@@ -5,6 +5,7 @@
  */
 #include <pybind11/pybind11.h>
 
+#include <nsfd/config.hpp>
 #include <nsfd/field.hpp>
 #include <nsfd/grid/staggered_grid.hpp>
 #include <nsfd/iterpressure.hpp>
@@ -16,6 +17,7 @@ namespace nsfdpy {
 void bindIterPressure(py::module_ &m) {
   py::class_<nsfd::IterPressure>(m, "IterPressure")
       .def(py::init<nsfd::grid::StaggeredGrid &, double, int, double>())
+      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::config::Solver &>())
       .def("__call__", &nsfd::IterPressure::operator());
 }
 }  // namespace nsfdpy

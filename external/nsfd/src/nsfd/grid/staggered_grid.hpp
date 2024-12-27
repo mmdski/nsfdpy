@@ -8,6 +8,7 @@
 
 #include <cstddef>
 
+#include "../config.hpp"
 #include "geom_data.hpp"
 #include "grid.hpp"
 
@@ -44,6 +45,10 @@ class StaggeredGrid {
         p(xlength, imax, ylength, jmax, 0.5, 0.5),
         u(xlength, imax, ylength, jmax, 0, 0.5),
         v(xlength, imax, ylength, jmax, 0.5, 0) {}
+  StaggeredGrid(nsfd::config::Geometry &config)
+      : StaggeredGrid(config.xlength, config.imax, config.ylength,
+                      config.jmax) {}
+
   double delx() { return delx_; }
   double dely() { return dely_; }
   GeometryData geom_data() const { return geom_data_; }

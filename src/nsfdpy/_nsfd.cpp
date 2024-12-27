@@ -23,6 +23,7 @@ PYBIND11_MODULE(_nsfd, m) {
 
   nsfdpy::comp::bindFG(m_comp);
   nsfdpy::comp::bindRHS(m_comp);
+  nsfdpy::comp::bindTimeStep(m_comp);
   nsfdpy::comp::bindUNext(m_comp);
 
   auto m_config = m.def_submodule("config");

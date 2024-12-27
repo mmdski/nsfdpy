@@ -4,7 +4,14 @@
 import yaml
 
 from nsfdpy._nsfd.bcond import Type as BCType, Data as BCData
-from nsfdpy._nsfd.config import BoundaryCond, Geometry, InitialCond, Solver, Time
+from nsfdpy._nsfd.config import (
+    BoundaryCond,
+    Constants,
+    Geometry,
+    InitialCond,
+    Solver,
+    Time,
+)
 
 
 class Config:
@@ -38,6 +45,14 @@ class Config:
         w_bc = self._bc_data(bc_dict["west"])
 
         return BoundaryCond(n_bc, s_bc, e_bc, w_bc)
+
+    def constants(self) -> Constants:
+
+        return Constants(
+            self._config["constants"]["Re"],
+            self._config["constants"]["GX"],
+            self._config["constants"]["GY"],
+        )
 
     def geometry(self) -> Geometry:
 

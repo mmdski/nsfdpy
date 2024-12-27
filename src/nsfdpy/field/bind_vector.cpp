@@ -18,6 +18,7 @@ namespace nsfdpy {
 namespace field {
 void bindVector(py::module_ &m) {
   py::class_<nsfd::Field<nsfd::Vector>>(m, "VectorField")
+      .def(py::init<nsfd::Field<nsfd::Vector>>())
       .def(py::init<size_t, size_t>())
       .def(py::init([](size_t imax, size_t jmax,
                        std::tuple<double, double> inital_value) {
@@ -26,7 +27,7 @@ void bindVector(py::module_ &m) {
       .def(py::init([](size_t imax, size_t jmax, nsfd::Vector inital_value) {
         return new nsfd::Field<nsfd::Vector>(imax, jmax, inital_value);
       }))
-      .def(py::init<nsfd::Field<nsfd::Vector>>())
+      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::Vector>())
       .def(
           "__getitem__",
           [](nsfd::Field<nsfd::Vector> &self,

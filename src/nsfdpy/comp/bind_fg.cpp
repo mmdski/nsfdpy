@@ -17,6 +17,8 @@ void bindFG(py::module_ &m) {
   py::class_<nsfd::comp::FG>(m, "FG")
       .def(
           py::init<nsfd::grid::StaggeredGrid &, nsfd::Vector, double, double>())
+      .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::config::Constants &,
+                    nsfd::config::Solver &>())
       .def("__call__", &nsfd::comp::FG::operator());
 }
 }  // namespace comp
