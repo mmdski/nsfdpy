@@ -45,6 +45,7 @@ void bindScalar(py::module_ &m) {
       .def(py::init<size_t, size_t>())
       .def(py::init<size_t, size_t, double>())
       .def(py::init<size_t, size_t, nsfd::Scalar>())
+      .def(py::init<nsfd::grid::StaggeredGrid &>())
       .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::Scalar>())
       .def("__getitem__", &__getitem__)
       .def("__setitem__", &__setitem__)

@@ -162,6 +162,7 @@ class ScalarFieldPlot:
         field: ScalarField,
         ax: Axes | None = None,
         boundary: bool = False,
+        levels: int | None = None,
         **kwargs: dict[str, Any],
     ) -> Axes:
 
@@ -175,7 +176,10 @@ class ScalarFieldPlot:
             Y = Y[1:-1, 1:-1]
             values = values[1:-1, 1:-1]
 
-        ax.contour(X, Y, values, **kwargs)
+        if levels:
+            ax.contour(X, Y, values, levels, **kwargs)
+        else:
+            ax.contour(X, Y, values, **kwargs)
 
         return ax
 

@@ -2,6 +2,7 @@
   "cSpell.words": [
     "autodoc",
     "axhline",
+    "axvline",
     "bcond",
     "cond",
     "couette",
@@ -75,7 +76,8 @@
     "xlim",
     "yfrac",
     "ylabel",
-    "ylength"
+    "ylength",
+    "ylim"
   ],
   "notebook.lineNumbers": "on",
   "esbonio.sphinx.confDir": "${workspaceFolder}/docs",
