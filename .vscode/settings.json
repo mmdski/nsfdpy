@@ -77,7 +77,8 @@
     "yfrac",
     "ylabel",
     "ylength",
-    "ylim"
+    "ylim",
+    "zorder"
   ],
   "notebook.lineNumbers": "on",
   "esbonio.sphinx.confDir": "${workspaceFolder}/docs",

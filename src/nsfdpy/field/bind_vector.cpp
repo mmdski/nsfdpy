@@ -48,7 +48,7 @@ void bindVector(py::module_ &m) {
            [](nsfd::Field<nsfd::Vector> &self) {
              return new nsfd::Field<nsfd::Vector>(self.n_interior());
            })
-      .def("res", &nsfd::Field<nsfd::Vector>::res)
+      .def("resid", &nsfd::Field<nsfd::Vector>::resid)
       .def_property_readonly(
           "values",
           [](nsfd::Field<nsfd::Vector> &self) {

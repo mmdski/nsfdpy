@@ -254,6 +254,7 @@ class VectorFieldPlot:
         self,
         field: VectorField,
         plot_cells: bool = False,
+        shape: tuple[int, int] | None = None,
         ax: Axes | None = None,
         **kwargs: dict[str, Any],
     ) -> Axes:
@@ -261,18 +262,41 @@ class VectorFieldPlot:
         if not ax:
             ax = plt.axes()
 
-        U = np.empty((self._grid.imax, self._grid.jmax))
-        V = np.empty((self._grid.imax, self._grid.jmax))
+        xlength = self._grid.imax * self._grid.delx
+        ylength = self._grid.jmax * self._grid.dely
+
+        if shape:
+            n_x = shape[0]
+            n_y = shape[1]
+            dx = xlength / n_x
+            dy = ylength / n_y
+
+            x = np.linspace(dx / 2, xlength - dx / 2, num=n_x)
+            print(x.shape)
+            y = np.linspace(dy / 2, ylength - dy / 2, num=n_y)
+            print(y.shape)
+
+            X, Y = np.meshgrid(x, y, indexing="ij")
+
+        else:
+
+            X, Y = self._X, self._Y
+            n_x = X.shape[0]
+            n_y = Y.shape[1]
+
+        U = np.empty((n_x, n_y))
+        V = np.empty((n_x, n_y))
 
         interp = VectorFieldInterp(self._grid, field)
 
         # interior grid points only
-        for i in range(self._grid.imax):
-            for j in range(self._grid.jmax):
-                U[i, j], V[i, j] = interp(self._X[i, j], self._Y[i, j])
+        for i in range(n_x):
+            for j in range(n_y):
+                U[i, j], V[i, j] = interp(X[i, j], Y[i, j])
 
         if plot_cells:
             StaggeredGridPlot(self._grid).cells(ax)
-        ax.quiver(self._X, self._Y, U, V, **kwargs)
+
+        ax.quiver(X, Y, U, V, **kwargs)
 
         return ax

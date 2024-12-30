@@ -97,7 +97,7 @@ class NoSlipEBCond : public EBCond {
 
   void operator()(nsfd::Field<nsfd::Vector> &u,
                   [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t j = 1; j <= grid_.imax(); ++j) {
+    for (size_t j = 1; j <= grid_.jmax(); ++j) {
       u(grid_.imax(), j).x = 0.0;
       u(grid_.imax() + 1, j).y = 2.0 * uy_ - u(grid_.imax(), j).y;
     }
@@ -113,7 +113,7 @@ class PeriodicEBCond : public EBCond {
 
   void operator()(nsfd::Field<nsfd::Vector> &u,
                   [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t j = 1; j <= grid_.imax(); ++j) {
+    for (size_t j = 1; j <= grid_.jmax(); ++j) {
       u(grid_.imax(), j).x = u(1, j).x;
       u(grid_.imax() + 1, j).y = u(2, j).y;
     }

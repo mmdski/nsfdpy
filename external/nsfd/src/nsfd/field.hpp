@@ -73,7 +73,7 @@ class Field {
     return max_abs;
   }
 
-  double res(const nsfd::Field<T> &other) const {
+  double resid(const nsfd::Field<T> &other) const {
     double sum = 0;
     for (size_t i = 1; i <= imax_; ++i) {
       for (size_t j = 1; j <= jmax_; ++j) {
@@ -81,9 +81,7 @@ class Field {
       }
     }
 
-    double res = std::sqrt(sum * sum / static_cast<double>(imax_ * jmax_));
-
-    return res;
+    return std::sqrt(sum * sum / static_cast<double>(imax_ * jmax_));
   }
 
   std::tuple<size_t, size_t> n_interior() const { return {imax_, jmax_}; }
