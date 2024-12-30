@@ -22,8 +22,8 @@ class Curl:
 
     def __call__(self, i: int, j: int) -> float:
 
-        dx = (self._field[i + 1, j].y - self._field[i - 1, j].y) / (2 * self._grid.delx)
-        dy = (self._field[i, j + 1].x - self._field[i, j - 1].x) / (2 * self._grid.delx)
+        dx = (self._field[i, j].y - self._field[i - 1, j].y) / self._grid.delx
+        dy = (self._field[i, j].x - self._field[i, j - 1].x) / self._grid.dely
 
         return cast(float, dx - dy)
 
