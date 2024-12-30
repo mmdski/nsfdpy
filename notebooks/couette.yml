@@ -8,7 +8,7 @@ time:
   tau: 0.9
 solver:
   itermax: 1000
-  eps: 0.001
+  eps: 1.0e-6
   omg: 1.7
   gamma: 0.9
 constants:

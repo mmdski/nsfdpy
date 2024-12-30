@@ -37,7 +37,7 @@ class FG {
 
     for (size_t i = 1; i <= grid_.imax(); ++i) {
       for (size_t j = 1; j <= grid_.jmax(); ++j) {
-        fg(i, j) = u(i, j) + delt * (g_ + 1.0 / Re_ * (lap(i, j) - adv(i, j)));
+        fg(i, j) = u(i, j) + delt * (g_ + 1.0 / Re_ * lap(i, j) - adv(i, j));
       }
     }
 

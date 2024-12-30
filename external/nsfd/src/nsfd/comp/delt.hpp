@@ -21,15 +21,13 @@ class DelT {
  private:
   nsfd::grid::StaggeredGrid &grid_;
   double delt_;
+  double Re_;
   std::optional<double> tau_;
 
  public:
-  DelT(nsfd::grid::StaggeredGrid &grid, double delt)
-      : grid_{grid}, delt_{delt}, tau_{std::nullopt} {}
-  DelT(double delt, double tau, nsfd::grid::StaggeredGrid &grid)
-      : grid_{grid}, delt_{delt}, tau_{tau} {}
-  DelT(nsfd::grid::StaggeredGrid &grid, nsfd::config::Time &time)
-      : grid_{grid}, delt_{time.delt}, tau_{time.tau} {}
+  DelT(nsfd::grid::StaggeredGrid &grid, nsfd::config::Constants &constants,
+       nsfd::config::Time &time)
+      : grid_{grid}, delt_{time.delt}, Re_{constants.Re}, tau_{time.tau} {}
 
   double operator()(nsfd::Field<nsfd::Vector> &u) {
     if (!tau_.has_value()) return delt_;
@@ -51,7 +49,10 @@ class DelT {
     }
 
     return tau_.value() *
-           std::min(grid_.delx() / u_max_abs, grid_.dely() / v_max_abs);
+           std::min({Re_ / 2 /
+                         (1 / (grid_.delx() * grid_.delx()) +
+                          1 / (grid_.dely() * grid_.dely())),
+                     grid_.delx() / u_max_abs, grid_.dely() / v_max_abs});
   }
 };
 }  // namespace comp

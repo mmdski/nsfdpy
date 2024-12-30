@@ -5,14 +5,14 @@ geometry:
   ylength: 1.0
 time:
   delt: 0.02
-  tau: 0.9
+  tau: 0.5
 solver:
   itermax: 1000
-  eps: 0.001
+  eps: 1.0e-6
   omg: 1.7
   gamma: 0.9
 constants:
-  Re: 500
+  Re: 1000
   GX: 0.0
   GY: 0.0
 initial:

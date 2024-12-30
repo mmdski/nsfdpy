@@ -49,6 +49,7 @@ void bindConfig(py::module_ &m) {
 
   py::class_<nsfd::config::Time>(m, "Time")
       .def(py::init<double>())
+      .def(py::init<double, std::optional<double>>())
       .def_readonly("delt", &nsfd::config::Time::delt)
       .def_readonly("tau", &nsfd::config::Time::tau);
 }

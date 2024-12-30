@@ -44,7 +44,7 @@ class TimeStep {
            nsfd::config::Time &time) {
     grid_ = std::make_unique<nsfd::grid::StaggeredGrid>(geometry);
     apply_bc_ = std::make_unique<nsfd::bcond::Apply>(*grid_, bcond);
-    comp_delt_ = std::make_unique<nsfd::comp::DelT>(*grid_, time);
+    comp_delt_ = std::make_unique<nsfd::comp::DelT>(*grid_, constants, time);
     comp_fg_ = std::make_unique<nsfd::comp::FG>(*grid_, constants, solver);
     comp_rhs_ = std::make_unique<nsfd::comp::RHS>(*grid_);
     iter_p_ = std::make_unique<nsfd::IterPressure>(*grid_, solver);

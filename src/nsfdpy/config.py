@@ -83,5 +83,9 @@ class Config:
     def time(self) -> Time:
 
         delt = self._config["time"]["delt"]
+        try:
+            tau = self._config["time"]["tau"]
+        except KeyError:
+            tau = None
 
-        return Time(delt)
+        return Time(delt, tau)
