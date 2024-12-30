@@ -69,6 +69,7 @@ struct Time {
   double delt;
   std::optional<double> tau;
   Time(double delt) : delt{delt}, tau{std::nullopt} {}
+  Time(double delt, double tau) : delt{delt}, tau{tau} {}
 };
 
 }  // namespace config

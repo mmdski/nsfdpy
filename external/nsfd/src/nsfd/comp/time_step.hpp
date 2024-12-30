@@ -17,6 +17,7 @@
 #include "../iterpressure.hpp"
 #include "../scalar.hpp"
 #include "../vector.hpp"
+#include "delt.hpp"
 #include "fg.hpp"
 #include "rhs.hpp"
 #include "u_next.hpp"
@@ -29,6 +30,7 @@ class TimeStep {
   std::optional<double> tau_;
   std::unique_ptr<nsfd::grid::StaggeredGrid> grid_;
   std::unique_ptr<nsfd::bcond::Apply> apply_bc_;
+  std::unique_ptr<nsfd::comp::DelT> comp_delt_;
   std::unique_ptr<nsfd::comp::FG> comp_fg_;
   std::unique_ptr<nsfd::comp::RHS> comp_rhs_;
   std::unique_ptr<nsfd::IterPressure> iter_p_;
@@ -40,10 +42,9 @@ class TimeStep {
   TimeStep(nsfd::config::Geometry &geometry, nsfd::config::BoundaryCond &bcond,
            nsfd::config::Constants &constants, nsfd::config::Solver &solver,
            nsfd::config::Time &time) {
-    delt_ = time.delt;
-    tau_ = time.tau;
     grid_ = std::make_unique<nsfd::grid::StaggeredGrid>(geometry);
     apply_bc_ = std::make_unique<nsfd::bcond::Apply>(*grid_, bcond);
+    comp_delt_ = std::make_unique<nsfd::comp::DelT>(*grid_, time);
     comp_fg_ = std::make_unique<nsfd::comp::FG>(*grid_, constants, solver);
     comp_rhs_ = std::make_unique<nsfd::comp::RHS>(*grid_);
     iter_p_ = std::make_unique<nsfd::IterPressure>(*grid_, solver);
@@ -55,6 +56,7 @@ class TimeStep {
   std::tuple<double, std::tuple<int, double>> operator()(
       nsfd::Field<nsfd::Vector> &u, nsfd::Field<nsfd::Scalar> &p) {
     apply_bc_->operator()(u, p);
+    delt_ = comp_delt_->operator()(u);
     comp_fg_->operator()(u, delt_, *fg_);
     comp_rhs_->operator()(*fg_, delt_, *rhs_);
     std::tuple<int, double> p_it = iter_p_->operator()(p, *rhs_);

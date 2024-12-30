@@ -26,7 +26,7 @@ class Config:
 
     def _bc_data(self, bc_dict: dict[str, str]) -> BCData:
 
-        bc_map = {"no slip": BCType.NoSlip}
+        bc_map = {"no slip": BCType.NoSlip, "periodic": BCType.Periodic}
 
         bc_type = bc_map[bc_dict["type"]]
 

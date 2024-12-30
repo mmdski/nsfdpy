@@ -157,6 +157,28 @@ class ScalarFieldPlot:
 
         self._grid = grid
 
+    def contour(
+        self,
+        field: ScalarField,
+        ax: Axes | None = None,
+        boundary: bool = False,
+        **kwargs: dict[str, Any],
+    ) -> Axes:
+
+        if not ax:
+            ax = plt.axes()
+
+        X, Y = self._grid.p.meshgrid()
+        values = field.values
+        if not boundary:
+            X = X[1:-1, 1:-1]
+            Y = Y[1:-1, 1:-1]
+            values = values[1:-1, 1:-1]
+
+        ax.contour(X, Y, values, **kwargs)
+
+        return ax
+
     def pcolormesh(
         self,
         field: ScalarField,

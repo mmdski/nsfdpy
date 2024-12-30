@@ -7,6 +7,7 @@
 #define NSFD_BCOND_APPLY_HPP_
 
 #include <memory>
+#include <stdexcept>
 
 #include "../config.hpp"
 #include "../grid/staggered_grid.hpp"
@@ -31,6 +32,8 @@ class Apply {
         n_bcond_ = std::make_unique<nsfd::bcond::NoSlipNBCond>(
             grid, n_bc.value.value_or(0));
         break;
+      default:
+        throw std::invalid_argument("Invalid north boundary condition type");
     }
 
     switch (s_bc.type) {
@@ -38,6 +41,8 @@ class Apply {
         s_bcond_ = std::make_unique<nsfd::bcond::NoSlipSBCond>(
             grid, s_bc.value.value_or(0));
         break;
+      default:
+        throw std::invalid_argument("Invalid south boundary condition type");
     }
 
     switch (e_bc.type) {
@@ -45,6 +50,11 @@ class Apply {
         e_bcond_ = std::make_unique<nsfd::bcond::NoSlipEBCond>(
             grid, e_bc.value.value_or(0));
         break;
+      case nsfd::bcond::Type::Periodic:
+        e_bcond_ = std::make_unique<nsfd::bcond::PeriodicEBCond>(grid);
+        break;
+      default:
+        throw std::invalid_argument("Invalid east boundary condition type");
     }
 
     switch (w_bc.type) {
@@ -52,6 +62,11 @@ class Apply {
         w_bcond_ = std::make_unique<nsfd::bcond::NoSlipWBCond>(
             grid, w_bc.value.value_or(0));
         break;
+      case nsfd::bcond::Type::Periodic:
+        w_bcond_ = std::make_unique<nsfd::bcond::PeriodicWBCond>(grid);
+        break;
+      default:
+        throw std::invalid_argument("Invalid west boundary condition type");
     }
   }
 

@@ -55,6 +55,14 @@ class Field {
     return values_[i * (jmax_ + 2) + j];
   }
 
+  void copy(const nsfd::Field<T> &other) {
+    for (size_t i = 0; i <= imax_ + 1; ++i) {
+      for (size_t j = 0; j <= jmax_ + 1; ++j) {
+        this->operator()(i, j) = other(i, j);
+      }
+    }
+  }
+
   double max_abs() {
     double max_abs = 0;
     double abs = 0;
@@ -64,6 +72,20 @@ class Field {
     }
     return max_abs;
   }
+
+  double res(const nsfd::Field<T> &other) const {
+    double sum = 0;
+    for (size_t i = 1; i <= imax_; ++i) {
+      for (size_t j = 1; j <= jmax_; ++j) {
+        sum += this->operator()(i, j).abs() - other(i, j).abs();
+      }
+    }
+
+    double res = std::sqrt(sum * sum / static_cast<double>(imax_ * jmax_));
+
+    return res;
+  }
+
   std::tuple<size_t, size_t> n_interior() const { return {imax_, jmax_}; }
   std::tuple<size_t, size_t> shape() const { return {imax_ + 2, jmax_ + 2}; }
 };

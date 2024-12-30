@@ -68,6 +68,7 @@ if(nsfd_BUILD_TESTS)
   endmacro()
 
   add_nsfd_test(bcond.apply.test src/nsfd/bcond/apply.test.cpp)
+  add_nsfd_test(bcond.bcond.test src/nsfd/bcond/bcond.test.cpp)
   add_nsfd_test(comp.fg.test src/nsfd/comp/fg.test.cpp)
   add_nsfd_test(comp.time_step.test src/nsfd/comp/time_step.test.cpp)
   add_nsfd_test(field.scalar.test src/nsfd/field/scalar.test.cpp)

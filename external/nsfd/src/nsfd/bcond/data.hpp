@@ -11,7 +11,7 @@
 namespace nsfd {
 namespace bcond {
 
-enum class Type { NoSlip };
+enum class Type { NoSlip, Periodic };
 
 struct Data {
   Type type;

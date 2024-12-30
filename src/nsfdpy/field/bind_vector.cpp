@@ -43,10 +43,12 @@ void bindVector(py::module_ &m) {
               std::tuple<double, double> u) {
              self(std::get<0>(idx), std::get<1>(idx)) = u;
            })
+      .def("copy", &nsfd::Field<nsfd::Vector>::copy)
       .def("new_like",
            [](nsfd::Field<nsfd::Vector> &self) {
              return new nsfd::Field<nsfd::Vector>(self.n_interior());
            })
+      .def("res", &nsfd::Field<nsfd::Vector>::res)
       .def_property_readonly(
           "values",
           [](nsfd::Field<nsfd::Vector> &self) {

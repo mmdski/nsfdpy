@@ -104,6 +104,22 @@ class NoSlipEBCond : public EBCond {
   }
 };
 
+class PeriodicEBCond : public EBCond {
+ private:
+  nsfd::grid::StaggeredGrid &grid_;
+
+ public:
+  PeriodicEBCond(nsfd::grid::StaggeredGrid &grid) : grid_{grid} {}
+
+  void operator()(nsfd::Field<nsfd::Vector> &u,
+                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
+    for (size_t j = 1; j <= grid_.imax(); ++j) {
+      u(grid_.imax(), j).x = u(1, j).x;
+      u(grid_.imax() + 1, j).y = u(2, j).y;
+    }
+  }
+};
+
 /*
  * West boundary conditions
  */
@@ -125,9 +141,27 @@ class NoSlipWBCond : public WBCond {
 
   void operator()(nsfd::Field<nsfd::Vector> &u,
                   [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t j = 1; j <= grid_.imax(); ++j) {
+    for (size_t j = 1; j <= grid_.jmax(); ++j) {
       u(0, j).x = 0.0;
       u(0, j).y = 2.0 * uy_ - u(1, j).y;
+    }
+  }
+};
+
+class PeriodicWBCond : public WBCond {
+ private:
+  nsfd::grid::StaggeredGrid &grid_;
+
+ public:
+  PeriodicWBCond(nsfd::grid::StaggeredGrid &grid) : grid_{grid} {}
+
+  void operator()(nsfd::Field<nsfd::Vector> &u,
+                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
+    for (size_t j = 1; j <= grid_.jmax(); ++j) {
+      u(0, j).x = u(grid_.imax() - 1, j).x;
+      u(0, j).y = u(grid_.imax() - 1, j).y;
+      u(1, j).y = u(grid_.imax(), j).y;
+      p(1, j) = p(grid_.imax(), j);
     }
   }
 };

@@ -76,7 +76,9 @@ struct Vector {
 
   Vector operator/(const double r) const { return {this->x / r, this->y / r}; }
 
-  double abs() { return std::sqrt(this->x * this->x + this->y * this->y); }
+  double abs() const {
+    return std::sqrt(this->x * this->x + this->y * this->y);
+  }
 };
 }  // namespace nsfd
 
