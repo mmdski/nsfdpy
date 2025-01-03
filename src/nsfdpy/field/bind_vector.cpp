@@ -43,6 +43,7 @@ void bindVector(py::module_ &m) {
               std::tuple<double, double> u) {
              self(std::get<0>(idx), std::get<1>(idx)) = u;
            })
+      .def("all_isfinite", &nsfd::Field<nsfd::Vector>::all_isfinite)
       .def("copy", &nsfd::Field<nsfd::Vector>::copy)
       .def("new_like",
            [](nsfd::Field<nsfd::Vector> &self) {

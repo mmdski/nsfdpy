@@ -49,6 +49,7 @@ void bindScalar(py::module_ &m) {
       .def(py::init<nsfd::grid::StaggeredGrid &, nsfd::Scalar>())
       .def("__getitem__", &__getitem__)
       .def("__setitem__", &__setitem__)
+      .def("all_isfinite", &nsfd::Field<nsfd::Scalar>::all_isfinite)
       .def_property_readonly("values", &values);
 }
 }  // namespace field

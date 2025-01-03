@@ -79,6 +79,8 @@ struct Vector {
   double abs() const {
     return std::sqrt(this->x * this->x + this->y * this->y);
   }
+
+  bool isfinite() { return std::isfinite(x) && std::isfinite(y); }
 };
 }  // namespace nsfd
 

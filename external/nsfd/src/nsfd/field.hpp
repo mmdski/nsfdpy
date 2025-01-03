@@ -55,6 +55,15 @@ class Field {
     return values_[i * (jmax_ + 2) + j];
   }
 
+  bool all_isfinite() {
+    for (size_t i = 0; i <= imax_ + 1; ++i) {
+      for (size_t j = 0; j <= jmax_ + 1; ++j) {
+        if (!operator()(i, j).isfinite()) return false;
+      }
+    }
+    return true;
+  }
+
   void copy(const nsfd::Field<T> &other) {
     for (size_t i = 0; i <= imax_ + 1; ++i) {
       for (size_t j = 0; j <= jmax_ + 1; ++j) {

@@ -58,6 +58,8 @@ class Scalar {
   operator double() const { return value_; }
 
   Scalar abs() { return Scalar(std::abs(value_)); }
+
+  bool isfinite() { return std::isfinite(value_); }
 };
 
 }  // namespace nsfd
