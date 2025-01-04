@@ -13,6 +13,8 @@ PYBIND11_MODULE(_nsfd, m) {
   nsfdpy::bindScalar(m);
   nsfdpy::bindVector(m);
 
+  nsfdpy::bindGeometry(m);
+
   nsfdpy::bindIterPressure(m);
 
   auto m_bcond = m.def_submodule("bcond");
