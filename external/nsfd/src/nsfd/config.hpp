@@ -8,6 +8,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <utility>
 
 #include "bcond/data.hpp"
 #include "vector.hpp"
@@ -39,9 +40,22 @@ struct Geometry {
   size_t jmax;
   double xlength;
   double ylength;
+  std::optional<std::vector<std::pair<size_t, size_t>>> obstacles;
 
   Geometry(size_t imax, size_t jmax, double xlength, double ylength)
-      : imax{imax}, jmax{jmax}, xlength{xlength}, ylength{ylength} {}
+      : imax{imax},
+        jmax{jmax},
+        xlength{xlength},
+        ylength{ylength},
+        obstacles{std::nullopt} {}
+
+  Geometry(size_t imax, size_t jmax, double xlength, double ylength,
+           std::vector<std::pair<size_t, size_t>> obstacles)
+      : imax{imax},
+        jmax{jmax},
+        xlength{xlength},
+        ylength{ylength},
+        obstacles{obstacles} {}
 };
 
 struct InitialCond {

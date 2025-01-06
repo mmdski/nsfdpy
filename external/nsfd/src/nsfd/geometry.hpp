@@ -7,9 +7,11 @@
 #define NSFD_GEOM_GEOMETRY_HPP_
 
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
+#include "bcond/data.hpp"
 #include "grid/staggered_grid.hpp"
 
 namespace nsfd {
@@ -43,7 +45,19 @@ class Geometry {
     identify_fluid();
   }
 
-  std::vector<std::pair<size_t, size_t>> boundary_cells() { return boundary_; }
+  std::vector<std::pair<size_t, size_t>> boundary_cells() {
+    std::vector<std::pair<size_t, size_t>> cells;
+    for (auto const &[i, j, direction] : boundary_) {
+      cells.emplace_back(std::make_pair(i, j));
+    }
+    return cells;
+  }
+
+  std::vector<std::tuple<size_t, size_t, nsfd::bcond::Direction>>
+  boundary_cond() {
+    return boundary_;
+  }
+
   std::vector<std::pair<size_t, size_t>> fluid_cells() { return fluid_; }
 
   std::vector<std::pair<size_t, size_t>> obstacle_cells() {
@@ -67,7 +81,7 @@ class Geometry {
   size_t imax_;
   size_t jmax_;
   std::vector<Cell> cells_;
-  std::vector<std::pair<size_t, size_t>> boundary_;
+  std::vector<std::tuple<size_t, size_t, nsfd::bcond::Direction>> boundary_;
   std::vector<std::pair<size_t, size_t>> fluid_;
 
   Cell &operator()(size_t i, size_t j) {
@@ -97,9 +111,14 @@ class Geometry {
     for (size_t i = 1; i <= imax_; ++i) {
       for (size_t j = 1; j <= jmax_; ++j) {
         switch (operator()(i, j).type) {
-          case Cell::Type::Obstacle:
-            if (is_interior_boundary(i, j))
-              boundary_.emplace_back(std::make_pair(i, j));
+          case Cell::Type::Obstacle: {
+            nsfd::bcond::Direction direction = boundary_direction(i, j);
+            if (direction == nsfd::bcond::Direction::None)
+              continue;
+            else
+              boundary_.emplace_back(std::make_tuple(i, j, direction));
+            break;
+          }
           default:
             break;
         }
@@ -118,26 +137,48 @@ class Geometry {
 
   bool is_admissible(size_t i, size_t j) {
     // return true for fluid cells
-    if (operator()(i, j).type == Cell::Type::Fluid) return true;
+    if (is_fluid(i, j)) return true;
 
     // admit all domain boundary cells
     if (i == 0 || i == imax_ + 1 || j == 0 || j == jmax_ + 1) return true;
 
     // must not be a single layer in either direction
-    return !((operator()(i + 1, j).type == Cell::Type::Fluid &&
-              operator()(i - 1, j).type == Cell::Type::Fluid) ||
-             (operator()(i, j + 1).type == Cell::Type::Fluid &&
-              operator()(i, j - 1).type == Cell::Type::Fluid));
+    return !((is_fluid(i + 1, j) && is_fluid(i - 1, j)) ||
+             (is_fluid(i, j + 1) && is_fluid(i, j - 1)));
 
     return true;
   }
 
+  bool is_fluid(size_t i, size_t j) {
+    return operator()(i, j).type == Cell::Type::Fluid;
+  }
+
   bool is_interior_boundary(size_t i, size_t j) {
     // checked after admissible cells are checked
-    return (operator()(i - 1, j).type == Cell::Type::Fluid) ||
-           (operator()(i + 1, j).type == Cell::Type::Fluid) ||
-           (operator()(i, j + 1).type == Cell::Type::Fluid) ||
-           (operator()(i, j - 1).type == Cell::Type::Fluid);
+    return (is_fluid(i - 1, j) || is_fluid(i + 1, j) || is_fluid(i, j + 1) ||
+            is_fluid(i, j - 1));
+  }
+
+  nsfd::bcond::Direction boundary_direction(size_t i, size_t j) {
+    // assuming admissible cells have been checked
+    if (is_fluid(i, j + 1)) {
+      if (is_fluid(i + 1, j + 1)) return nsfd::bcond::Direction::NorthEast;
+      if (is_fluid(i - 1, j + 1))
+        return nsfd::bcond::Direction::NorthWest;
+      else
+        return nsfd::bcond::Direction::North;
+    } else if (is_fluid(i, j - 1)) {
+      if (is_fluid(i + 1, j - 1)) return nsfd::bcond::Direction::SouthEast;
+      if (is_fluid(i - 1, j - 1))
+        return nsfd::bcond::Direction::SouthWest;
+      else
+        return nsfd::bcond::Direction::South;
+    } else if (is_fluid(i + 1, j)) {
+      return nsfd::bcond::Direction::East;
+    } else if (is_fluid(i - 1, j)) {
+      return nsfd::bcond::Direction::West;
+    } else
+      return nsfd::bcond::Direction::None;
   }
 };
 }  // namespace nsfd

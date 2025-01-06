@@ -13,6 +13,7 @@
 #include "../bcond/data.hpp"
 #include "../config.hpp"
 #include "../field.hpp"
+#include "../geometry.hpp"
 #include "../grid/staggered_grid.hpp"
 #include "../iterpressure.hpp"
 #include "../scalar.hpp"
@@ -25,25 +26,18 @@
 namespace nsfd {
 namespace comp {
 class TimeStep {
- private:
-  double delt_;
-  std::optional<double> tau_;
-  std::unique_ptr<nsfd::grid::StaggeredGrid> grid_;
-  std::unique_ptr<nsfd::bcond::Apply> apply_bc_;
-  std::unique_ptr<nsfd::comp::DelT> comp_delt_;
-  std::unique_ptr<nsfd::comp::FG> comp_fg_;
-  std::unique_ptr<nsfd::comp::RHS> comp_rhs_;
-  std::unique_ptr<nsfd::IterPressure> iter_p_;
-  std::unique_ptr<nsfd::comp::UNext> comp_u_next_;
-  std::unique_ptr<nsfd::Field<nsfd::Vector>> fg_;
-  std::unique_ptr<nsfd::Field<nsfd::Scalar>> rhs_;
-
  public:
   TimeStep(nsfd::config::Geometry &geometry, nsfd::config::BoundaryCond &bcond,
            nsfd::config::Constants &constants, nsfd::config::Solver &solver,
            nsfd::config::Time &time) {
     grid_ = std::make_unique<nsfd::grid::StaggeredGrid>(geometry);
-    apply_bc_ = std::make_unique<nsfd::bcond::Apply>(*grid_, bcond);
+
+    nsfd::Geometry geom =
+        geometry.obstacles.has_value()
+            ? nsfd::Geometry(*grid_, geometry.obstacles.value())
+            : nsfd::Geometry(*grid_);
+
+    apply_bc_ = std::make_unique<nsfd::bcond::Apply>(*grid_, bcond, geom);
     comp_delt_ = std::make_unique<nsfd::comp::DelT>(*grid_, constants, time);
     comp_fg_ = std::make_unique<nsfd::comp::FG>(*grid_, constants, solver);
     comp_rhs_ = std::make_unique<nsfd::comp::RHS>(*grid_);
@@ -63,6 +57,19 @@ class TimeStep {
     comp_u_next_->operator()(*fg_, p, delt_, u);
     return {delt_, p_it};
   }
+
+ private:
+  double delt_;
+  std::optional<double> tau_;
+  std::unique_ptr<nsfd::grid::StaggeredGrid> grid_;
+  std::unique_ptr<nsfd::bcond::Apply> apply_bc_;
+  std::unique_ptr<nsfd::comp::DelT> comp_delt_;
+  std::unique_ptr<nsfd::comp::FG> comp_fg_;
+  std::unique_ptr<nsfd::comp::RHS> comp_rhs_;
+  std::unique_ptr<nsfd::IterPressure> iter_p_;
+  std::unique_ptr<nsfd::comp::UNext> comp_u_next_;
+  std::unique_ptr<nsfd::Field<nsfd::Vector>> fg_;
+  std::unique_ptr<nsfd::Field<nsfd::Scalar>> rhs_;
 };
 }  // namespace comp
 }  // namespace nsfd

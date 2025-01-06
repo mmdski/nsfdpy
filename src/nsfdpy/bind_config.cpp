@@ -30,10 +30,13 @@ void bindConfig(py::module_ &m) {
 
   py::class_<nsfd::config::Geometry>(m, "Geometry")
       .def(py::init<size_t, size_t, double, double>())
+      .def(py::init<size_t, size_t, double, double,
+                    std::vector<std::pair<size_t, size_t>>>())
       .def_readonly("imax", &nsfd::config::Geometry::imax)
       .def_readonly("jmax", &nsfd::config::Geometry::jmax)
       .def_readonly("xlength", &nsfd::config::Geometry::xlength)
-      .def_readonly("ylength", &nsfd::config::Geometry::ylength);
+      .def_readonly("ylength", &nsfd::config::Geometry::ylength)
+      .def_readonly("obstacles", &nsfd::config::Geometry::obstacles);
 
   py::class_<nsfd::config::InitialCond>(m, "InitialCond")
       .def(py::init<double, double, double>())

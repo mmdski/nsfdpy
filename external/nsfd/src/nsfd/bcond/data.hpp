@@ -11,13 +11,25 @@
 namespace nsfd {
 namespace bcond {
 
+enum class Direction {
+  None,
+  North,
+  South,
+  East,
+  West,
+  NorthEast,
+  NorthWest,
+  SouthEast,
+  SouthWest
+};
+
 enum class Type { NoSlip, Periodic };
 
 struct Data {
   Type type;
-  std::optional<double> value;
+  double value;
 
-  Data(Type type) : type{type}, value{std::nullopt} {}
+  Data(Type type) : type{type}, value{0} {}
   Data(Type type, double value) : type{type}, value{value} {}
 };
 }  // namespace bcond

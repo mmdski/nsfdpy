@@ -12,158 +12,143 @@
 
 namespace nsfd {
 namespace bcond {
-class BCond {
+
+class NorthDomain {
  public:
-  virtual ~BCond() = default;
-  virtual void operator()(nsfd::Field<nsfd::Vector> &u,
-                          [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) = 0;
-};
+  NorthDomain(nsfd::grid::StaggeredGrid &grid, Data data)
+      : grid_{grid}, type_{data.type}, value_{data.value} {}
 
-/*
- * North boundary conditions
- */
-class NBCond : public BCond {
- public:
-  virtual void operator()(nsfd::Field<nsfd::Vector> &u,
-                          [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) = 0;
-};
-
-class NoSlipNBCond : public NBCond {
- private:
-  double ux_;
-  nsfd::grid::StaggeredGrid &grid_;
-
- public:
-  NoSlipNBCond(nsfd::grid::StaggeredGrid &grid) : ux_{0}, grid_(grid) {}
-  NoSlipNBCond(nsfd::grid::StaggeredGrid &grid, double ux)
-      : ux_{ux}, grid_(grid) {}
-
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t i = 1; i <= grid_.imax(); ++i) {
-      u(i, grid_.jmax() + 1).x = 2.0 * ux_ - u(i, grid_.jmax()).x;
-      u(i, grid_.jmax()).y = 0.0;
+  void set_u(nsfd::Field<nsfd::Vector> &u) {
+    switch (type_) {
+      case Type::NoSlip:
+        for (size_t i = 1; i <= grid_.imax(); ++i) {
+          u(i, grid_.jmax() + 1).x = 2.0 * value_ - u(i, grid_.jmax()).x;
+          u(i, grid_.jmax()).y = 0.0;
+        }
+        break;
+      default:
+        break;
     }
   }
-};
 
-/*
- * South boundary conditions
- */
-class SBCond : public BCond {
- public:
-  virtual void operator()(nsfd::Field<nsfd::Vector> &u,
-                          [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) = 0;
-};
-
-class NoSlipSBCond : public SBCond {
- private:
-  double ux_;
-  nsfd::grid::StaggeredGrid &grid_;
-
- public:
-  NoSlipSBCond(nsfd::grid::StaggeredGrid &grid) : ux_{0}, grid_(grid) {}
-  NoSlipSBCond(nsfd::grid::StaggeredGrid &grid, double ux)
-      : ux_{ux}, grid_(grid) {}
-
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t i = 1; i <= grid_.imax(); ++i) {
-      u(i, 0).x = 2.0 * ux_ - u(i, 1).x;
-      u(i, 0).y = 0.0;
-    }
-  }
-};
-
-/*
- * East boundary conditions
- */
-
-class EBCond : public BCond {
- public:
-  virtual void operator()(nsfd::Field<nsfd::Vector> &u,
-                          nsfd::Field<nsfd::Scalar> &p) = 0;
-};
-
-class NoSlipEBCond : public EBCond {
- private:
-  double uy_;
-  nsfd::grid::StaggeredGrid &grid_;
-
- public:
-  NoSlipEBCond(nsfd::grid::StaggeredGrid &grid) : uy_{0}, grid_{grid} {}
-  NoSlipEBCond(nsfd::grid::StaggeredGrid &grid, double uy)
-      : uy_{uy}, grid_{grid} {}
-
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
+  void set_p(nsfd::Field<nsfd::Scalar> &p) {
     for (size_t j = 1; j <= grid_.jmax(); ++j) {
-      u(grid_.imax(), j).x = 0.0;
-      u(grid_.imax() + 1, j).y = 2.0 * uy_ - u(grid_.imax(), j).y;
+      p(grid_.jmax() + 1, j) = p(grid_.jmax(), j);
     }
   }
-};
 
-class PeriodicEBCond : public EBCond {
  private:
   nsfd::grid::StaggeredGrid &grid_;
+  Type type_;
+  double value_;
+};
 
+class SouthDomain {
  public:
-  PeriodicEBCond(nsfd::grid::StaggeredGrid &grid) : grid_{grid} {}
+  SouthDomain(nsfd::grid::StaggeredGrid &grid, Data data)
+      : grid_{grid}, type_{data.type}, value_{data.value} {}
 
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t j = 1; j <= grid_.jmax(); ++j) {
-      u(grid_.imax(), j).x = u(1, j).x;
-      u(grid_.imax() + 1, j).y = u(2, j).y;
+  void set_u(nsfd::Field<nsfd::Vector> &u) {
+    switch (type_) {
+      case Type::NoSlip:
+        for (size_t i = 1; i <= grid_.imax(); ++i) {
+          u(i, 0).x = 2.0 * value_ - u(i, 1).x;
+          u(i, 0).y = 0.0;
+        }
+        break;
+      default:
+        break;
     }
   }
-};
 
-/*
- * West boundary conditions
- */
-class WBCond : public BCond {
- public:
-  virtual void operator()(nsfd::Field<nsfd::Vector> &u,
-                          [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) = 0;
-};
-
-class NoSlipWBCond : public WBCond {
- private:
-  double uy_;
-  nsfd::grid::StaggeredGrid &grid_;
-
- public:
-  NoSlipWBCond(nsfd::grid::StaggeredGrid &grid) : uy_{0}, grid_{grid} {}
-  NoSlipWBCond(nsfd::grid::StaggeredGrid &grid, double uy)
-      : uy_{uy}, grid_{grid} {}
-
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
+  void set_p(nsfd::Field<nsfd::Scalar> &p) {
     for (size_t j = 1; j <= grid_.jmax(); ++j) {
-      u(0, j).x = 0.0;
-      u(0, j).y = 2.0 * uy_ - u(1, j).y;
+      p(0, j) = p(1, j);
     }
   }
-};
 
-class PeriodicWBCond : public WBCond {
  private:
   nsfd::grid::StaggeredGrid &grid_;
+  Type type_;
+  double value_;
+};
 
+class EastDomain {
  public:
-  PeriodicWBCond(nsfd::grid::StaggeredGrid &grid) : grid_{grid} {}
+  EastDomain(nsfd::grid::StaggeredGrid &grid, Data data)
+      : grid_{grid}, type_{data.type}, value_{data.value} {}
 
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) override {
-    for (size_t j = 1; j <= grid_.jmax(); ++j) {
-      u(0, j).x = u(grid_.imax() - 1, j).x;
-      u(0, j).y = u(grid_.imax() - 1, j).y;
-      u(1, j).y = u(grid_.imax(), j).y;
-      p(1, j) = p(grid_.imax(), j);
+  void set_u(nsfd::Field<nsfd::Vector> &u) {
+    switch (type_) {
+      case Type::NoSlip:
+        for (size_t j = 1; j <= grid_.jmax(); ++j) {
+          u(grid_.imax(), j).x = 0.0;
+          u(grid_.imax() + 1, j).y = 2.0 * value_ - u(grid_.imax(), j).y;
+        }
+        break;
+      case Type::Periodic:
+        for (size_t j = 1; j <= grid_.jmax(); ++j) {
+          u(grid_.imax(), j).x = u(1, j).x;
+          u(grid_.imax() + 1, j).y = u(2, j).y;
+        }
+        break;
+      default:
+        break;
     }
   }
+
+  void set_p(nsfd::Field<nsfd::Scalar> &p) {
+    for (size_t j = 1; j <= grid_.jmax(); ++j) {
+      p(grid_.imax() + 1, j) = p(grid_.imax(), j);
+    }
+  }
+
+ private:
+  nsfd::grid::StaggeredGrid &grid_;
+  Type type_;
+  double value_;
+};
+
+class WestDomain {
+ public:
+  WestDomain(nsfd::grid::StaggeredGrid &grid, Data data)
+      : grid_{grid}, type_{data.type}, value_{data.value} {}
+
+  void set_u(nsfd::Field<nsfd::Vector> &u) {
+    switch (type_) {
+      case Type::NoSlip:
+        for (size_t j = 1; j <= grid_.jmax(); ++j) {
+          u(0, j).x = 0.0;
+          u(0, j).y = 2.0 * value_ - u(1, j).y;
+        }
+        break;
+      case Type::Periodic:
+        for (size_t j = 1; j <= grid_.jmax(); ++j) {
+          u(0, j).x = u(grid_.imax() - 1, j).x;
+          u(0, j).y = u(grid_.imax() - 1, j).y;
+          u(1, j).y = u(grid_.imax(), j).y;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  void set_p(nsfd::Field<nsfd::Scalar> &p) {
+    if (type_ == Type::Periodic) {
+      for (size_t j = 1; j <= grid_.jmax(); ++j) {
+        p(1, j) = p(grid_.imax(), j);
+      }
+    }
+    for (size_t j = 1; j <= grid_.jmax(); ++j) {
+      p(0, j) = p(1, j);
+    }
+  }
+
+ private:
+  nsfd::grid::StaggeredGrid &grid_;
+  Type type_;
+  double value_;
 };
 }  // namespace bcond
 }  // namespace nsfd
