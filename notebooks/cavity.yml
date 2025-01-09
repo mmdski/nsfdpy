@@ -1,6 +1,6 @@
 geometry:
-  imax: 128
-  jmax: 128
+  imax: 25
+  jmax: 25
   xlength: 1.0
   ylength: 1.0
 time:

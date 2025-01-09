@@ -272,9 +272,7 @@ class VectorFieldPlot:
             dy = ylength / n_y
 
             x = np.linspace(dx / 2, xlength - dx / 2, num=n_x)
-            print(x.shape)
             y = np.linspace(dy / 2, ylength - dy / 2, num=n_y)
-            print(y.shape)
 
             X, Y = np.meshgrid(x, y, indexing="ij")
 

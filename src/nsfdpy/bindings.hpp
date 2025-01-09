@@ -16,10 +16,7 @@ void bindVector(py::module_ &m);
 
 void bindGeometry(py::module_ &m);
 
-void bindIterPressure(py::module_ &m);
-
 namespace bcond {
-void bindApply(py::module_ &m);
 void bindData(py::module_ &m);
 }  // namespace bcond
 
@@ -27,7 +24,6 @@ namespace comp {
 void bindFG(py::module_ &m);
 void bindRHS(py::module_ &m);
 void bindTimeStep(py::module_ &m);
-void bindUNext(py::module_ &m);
 }  // namespace comp
 
 namespace config {

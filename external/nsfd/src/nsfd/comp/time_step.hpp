@@ -6,6 +6,7 @@
 #ifndef NSFD_COMP_TIME_STEP_HPP_
 #define NSFD_COMP_TIME_STEP_HPP_
 
+#include <memory>
 #include <optional>
 #include <tuple>
 
@@ -37,19 +38,24 @@ class TimeStep {
             ? nsfd::Geometry(*grid_, geometry.obstacles.value())
             : nsfd::Geometry(*grid_);
 
+    fluid_cells_ = geom.fluid_cells();
+
     apply_bc_ = std::make_unique<nsfd::bcond::Apply>(*grid_, bcond, geom);
-    comp_delt_ = std::make_unique<nsfd::comp::DelT>(*grid_, constants, time);
-    comp_fg_ = std::make_unique<nsfd::comp::FG>(*grid_, constants, solver);
-    comp_rhs_ = std::make_unique<nsfd::comp::RHS>(*grid_);
-    iter_p_ = std::make_unique<nsfd::IterPressure>(*grid_, solver);
-    comp_u_next_ = std::make_unique<nsfd::comp::UNext>(*grid_);
+    comp_delt_ = std::make_unique<nsfd::comp::DelT>(*grid_, constants, time,
+                                                    fluid_cells_);
+    comp_fg_ = std::make_unique<nsfd::comp::FG>(*grid_, constants, solver,
+                                                fluid_cells_, *apply_bc_);
+    comp_rhs_ = std::make_unique<nsfd::comp::RHS>(*grid_, fluid_cells_);
+    iter_p_ = std::make_unique<nsfd::IterPressure>(*grid_, solver, *apply_bc_,
+                                                   fluid_cells_);
+    comp_u_next_ = std::make_unique<nsfd::comp::UNext>(*grid_, fluid_cells_);
     fg_ = std::make_unique<nsfd::Field<nsfd::Vector>>(*grid_);
     rhs_ = std::make_unique<nsfd::Field<nsfd::Scalar>>(*grid_);
   }
 
   std::tuple<double, std::tuple<int, double>> operator()(
       nsfd::Field<nsfd::Vector> &u, nsfd::Field<nsfd::Scalar> &p) {
-    apply_bc_->operator()(u, p);
+    apply_bc_->set_u(u);
     delt_ = comp_delt_->operator()(u);
     comp_fg_->operator()(u, delt_, *fg_);
     comp_rhs_->operator()(*fg_, delt_, *rhs_);
@@ -70,6 +76,10 @@ class TimeStep {
   std::unique_ptr<nsfd::comp::UNext> comp_u_next_;
   std::unique_ptr<nsfd::Field<nsfd::Vector>> fg_;
   std::unique_ptr<nsfd::Field<nsfd::Scalar>> rhs_;
+
+  std::vector<std::pair<size_t, size_t>> fluid_cells_;
+  std::vector<std::tuple<size_t, size_t, nsfd::bcond::Direction>>
+      boundary_cond_;
 };
 }  // namespace comp
 }  // namespace nsfd

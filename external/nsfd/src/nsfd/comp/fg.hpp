@@ -6,6 +6,11 @@
 #ifndef NSFD_COMP_FG_HPP_
 #define NSFD_COMP_FG_HPP_
 
+#include <cstddef>
+#include <tuple>
+#include <vector>
+
+#include "../bcond/apply.hpp"
 #include "../config.hpp"
 #include "../field.hpp"
 #include "../grid/staggered_grid.hpp"
@@ -16,41 +21,45 @@
 namespace nsfd {
 namespace comp {
 class FG {
- private:
-  nsfd::grid::StaggeredGrid &grid_;
-  nsfd::Vector g_;
-  double Re_;
-  double gamma_;
-
  public:
-  FG(nsfd::grid::StaggeredGrid &grid, nsfd::Vector g, double Re, double gamma)
-      : grid_{grid}, g_{g}, Re_{Re}, gamma_{gamma} {}
+  FG(nsfd::grid::StaggeredGrid &grid, nsfd::Vector g, double Re, double gamma,
+     std::vector<std::pair<size_t, size_t>> &fluid_cells,
+     nsfd::bcond::Apply &apply_bcond)
+      : grid_{grid},
+        g_{g},
+        Re_{Re},
+        gamma_{gamma},
+        fluid_cells_(fluid_cells),
+        apply_bcond_(apply_bcond) {
+    (void)apply_bcond_;
+  }
 
   FG(nsfd::grid::StaggeredGrid &grid, nsfd::config::Constants &constants,
-     nsfd::config::Solver &solver)
-      : FG(grid, {constants.gx, constants.gy}, constants.Re, solver.gamma) {}
+     nsfd::config::Solver &solver,
+     std::vector<std::pair<size_t, size_t>> &fluid_cells,
+     nsfd::bcond::Apply &apply_bcond)
+      : FG(grid, {constants.gx, constants.gy}, constants.Re, solver.gamma,
+           fluid_cells, apply_bcond) {}
 
   void operator()(nsfd::Field<nsfd::Vector> &u, double delt,
                   nsfd::Field<nsfd::Vector> &fg) {
     nsfd::ops::Laplace<nsfd::Vector> lap(grid_, u);
     nsfd::ops::Advection adv(grid_, gamma_, u, u);
 
-    for (size_t i = 1; i <= grid_.imax(); ++i) {
-      for (size_t j = 1; j <= grid_.jmax(); ++j) {
-        fg(i, j) = u(i, j) + delt * (g_ + 1.0 / Re_ * lap(i, j) - adv(i, j));
-      }
+    for (const auto &[i, j] : fluid_cells_) {
+      fg(i, j) = u(i, j) + delt * (g_ + 1.0 / Re_ * lap(i, j) - adv(i, j));
     }
 
-    for (size_t j = 1; j <= grid_.jmax(); ++j) {
-      fg(0, j).x = u(0, j).x;
-      fg(grid_.imax(), j).x = u(grid_.imax(), j).x;
-    }
-
-    for (size_t i = 1; i <= grid_.imax(); ++i) {
-      fg(i, 0).y = u(i, 0).y;
-      fg(i, grid_.jmax()).y = u(i, grid_.jmax()).y;
-    }
+    apply_bcond_.set_fg(u, fg);
   }
+
+ private:
+  nsfd::grid::StaggeredGrid &grid_;
+  nsfd::Vector g_;
+  double Re_;
+  double gamma_;
+  std::vector<std::pair<size_t, size_t>> &fluid_cells_;
+  nsfd::bcond::Apply &apply_bcond_;
 };
 }  // namespace comp
 }  // namespace nsfd

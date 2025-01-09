@@ -15,7 +15,9 @@ namespace nsfdpy {
 namespace bcond {
 void bindData(py::module_ &m) {
   py::enum_<nsfd::bcond::Type>(m, "Type")
+      .value("Inflow", nsfd::bcond::Type::Inflow)
       .value("NoSlip", nsfd::bcond::Type::NoSlip)
+      .value("Outflow", nsfd::bcond::Type::Outflow)
       .value("Periodic", nsfd::bcond::Type::Periodic);
 
   py::class_<nsfd::bcond::Data>(m, "Data")

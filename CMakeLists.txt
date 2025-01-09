@@ -18,13 +18,8 @@ pybind11_add_module(_nsfd
     src/nsfdpy/bind_geom.cpp
     src/nsfdpy/bind_scalar.cpp
     src/nsfdpy/bind_vector.cpp
-    src/nsfdpy/bind_iterpressure.cpp
-    src/nsfdpy/bcond/bind_apply.cpp
     src/nsfdpy/bcond/bind_data.cpp
-    src/nsfdpy/comp/bind_fg.cpp
-    src/nsfdpy/comp/bind_rhs.cpp
     src/nsfdpy/comp/bind_time_step.cpp
-    src/nsfdpy/comp/bind_u_next.cpp
     src/nsfdpy/field/bind_scalar.cpp
     src/nsfdpy/field/bind_vector.cpp
     src/nsfdpy/grid/bind_axis.cpp

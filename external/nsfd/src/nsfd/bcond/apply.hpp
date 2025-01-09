@@ -22,12 +22,11 @@ class Apply {
  public:
   Apply(nsfd::grid::StaggeredGrid &grid, nsfd::bcond::Data n_bc,
         nsfd::bcond::Data s_bc, nsfd::bcond::Data e_bc, nsfd::bcond::Data w_bc)
-      : interior_() {
-    n_bcond_ = std::make_unique<nsfd::bcond::NorthDomain>(grid, n_bc);
-    s_bcond_ = std::make_unique<nsfd::bcond::SouthDomain>(grid, s_bc);
-    e_bcond_ = std::make_unique<nsfd::bcond::EastDomain>(grid, e_bc);
-    w_bcond_ = std::make_unique<nsfd::bcond::WestDomain>(grid, w_bc);
-  }
+      : n_bcond_{nsfd::bcond::NorthDomain(grid, n_bc)},
+        s_bcond_{nsfd::bcond::SouthDomain(grid, s_bc)},
+        e_bcond_{nsfd::bcond::EastDomain(grid, e_bc)},
+        w_bcond_{nsfd::bcond::WestDomain(grid, w_bc)},
+        interior_() {}
 
   Apply(nsfd::grid::StaggeredGrid &grid, nsfd::config::BoundaryCond &bcond)
       : Apply(grid, bcond.n, bcond.s, bcond.e, bcond.w) {}
@@ -40,34 +39,38 @@ class Apply {
     }
   }
 
-  void operator()(nsfd::Field<nsfd::Vector> &u,
-                  [[maybe_unused]] nsfd::Field<nsfd::Scalar> &p) {
-    set_u(u);
-  }
+  void set_fg(nsfd::Field<nsfd::Vector> &u, nsfd::Field<nsfd::Vector> &fg) {
+    n_bcond_.set_fg(u, fg);
+    s_bcond_.set_fg(u, fg);
+    e_bcond_.set_fg(u, fg);
+    w_bcond_.set_fg(u, fg);
 
-  void set_u(nsfd::Field<nsfd::Vector> &u) {
-    n_bcond_->set_u(u);
-    s_bcond_->set_u(u);
-    e_bcond_->set_u(u);
-    w_bcond_->set_u(u);
-
-    for (auto &c : interior_) c.set_u(u);
+    for (auto &c : interior_) c.set_fg(u, fg);
   }
 
   void set_p(nsfd::Field<nsfd::Scalar> &p) {
-    n_bcond_->set_p(p);
-    s_bcond_->set_p(p);
-    e_bcond_->set_p(p);
-    w_bcond_->set_p(p);
+    n_bcond_.set_p(p);
+    s_bcond_.set_p(p);
+    e_bcond_.set_p(p);
+    w_bcond_.set_p(p);
 
     for (auto &c : interior_) c.set_p(p);
   }
 
+  void set_u(nsfd::Field<nsfd::Vector> &u) {
+    n_bcond_.set_u(u);
+    s_bcond_.set_u(u);
+    e_bcond_.set_u(u);
+    w_bcond_.set_u(u);
+
+    for (auto &c : interior_) c.set_u(u);
+  }
+
  private:
-  std::unique_ptr<nsfd::bcond::NorthDomain> n_bcond_;
-  std::unique_ptr<nsfd::bcond::SouthDomain> s_bcond_;
-  std::unique_ptr<nsfd::bcond::EastDomain> e_bcond_;
-  std::unique_ptr<nsfd::bcond::WestDomain> w_bcond_;
+  nsfd::bcond::NorthDomain n_bcond_;
+  nsfd::bcond::SouthDomain s_bcond_;
+  nsfd::bcond::EastDomain e_bcond_;
+  nsfd::bcond::WestDomain w_bcond_;
 
   std::vector<Cell> interior_;
 };

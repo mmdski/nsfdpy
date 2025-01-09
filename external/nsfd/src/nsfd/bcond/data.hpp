@@ -23,7 +23,7 @@ enum class Direction {
   SouthWest
 };
 
-enum class Type { NoSlip, Periodic };
+enum class Type { Inflow, NoSlip, Outflow, Periodic };
 
 struct Data {
   Type type;

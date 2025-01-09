@@ -4,6 +4,8 @@
     "delt",
     "delx",
     "dely",
+    "duvdx",
+    "duvdy",
     "endmacro",
     "googletest",
     "gtest",
