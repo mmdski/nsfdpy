@@ -37,8 +37,8 @@ class StaggeredGrid {
         u(),
         v() {}
   StaggeredGrid(double xlength, size_t imax, double ylength, size_t jmax)
-      : delx_{xlength / imax},
-        dely_{ylength / jmax},
+      : delx_{xlength / static_cast<double>(imax)},
+        dely_{ylength / static_cast<double>(jmax)},
         geom_data_{xlength, ylength, imax, jmax},
         imax_{imax},
         jmax_{jmax},
