@@ -17,6 +17,7 @@
     "Wconversion",
     "Werror",
     "Wextra",
+    "Wvla",
     "xfrac",
     "xlength",
     "yfrac",

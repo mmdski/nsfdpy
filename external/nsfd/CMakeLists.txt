@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.23)
-project(nsfd LANGUAGES CXX)
+project(nsfd LANGUAGES C CXX)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -14,7 +17,7 @@ if(PROJECT_IS_TOP_LEVEL)
     add_compile_options(/guard:cf /analyze /permissive- /W4 /WX)
 
   else()
-    add_compile_options(-pedantic -Wall -Wextra -Wconversion -Werror)
+    add_compile_options(-pedantic -Wall -Wextra -Wconversion -Werror -Wvla)
   endif()
 endif()
 
@@ -33,55 +36,22 @@ if(nsfd_BUILD_TESTS)
   include(GoogleTest)
 endif()
 
-add_library(nsfd INTERFACE)
+set(NSFD_SRCS
+  src/ns_field_vec.c
+)
+add_library(nsfd ${NSFD_SRCS})
 add_library(nsfd::nsfd ALIAS nsfd)
+
+target_include_directories(nsfd PUBLIC include)
+
 target_sources(nsfd
-  INTERFACE
+  PUBLIC
   FILE_SET HEADERS
-  BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src
   FILES
-  src/nsfd/iterpressure.hpp
-  src/nsfd/scalar.hpp
-  src/nsfd/vector.hpp
-  src/nsfd/bcond/apply.hpp
-  src/nsfd/bcond/bcond.hpp
-  src/nsfd/bcond/data.hpp
-  src/nsfd/comp/fg.hpp
-  src/nsfd/comp/rhs.hpp
-  src/nsfd/field/field.hpp
-  src/nsfd/grid/axis.hpp
-  src/nsfd/grid/geom_data.hpp
-  src/nsfd/grid/grid.hpp
-  src/nsfd/grid/staggered_grid.hpp
-  src/nsfd/ops/advection.hpp
-  src/nsfd/ops/divergence.hpp
-  src/nsfd/ops/gradient.hpp
-  src/nsfd/ops/laplace.hpp
+  include/nsfd.h
 )
 
 if(nsfd_BUILD_TESTS)
-  macro(add_nsfd_test test_name source_file)
-    add_executable(${test_name} ${source_file})
-    target_link_libraries(${test_name} nsfd::nsfd GTest::gtest_main)
-    gtest_add_tests(TARGET ${test_name} TEST_LIST ${test_name}.test-list)
-    set_tests_properties(${${test_name}.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
-  endmacro()
-
-  add_nsfd_test(bcond.apply.test src/nsfd/bcond/apply.test.cpp)
-  add_nsfd_test(bcond.bcond.test src/nsfd/bcond/bcond.test.cpp)
-  add_nsfd_test(bcond.cell.test src/nsfd/bcond/cell.test.cpp)
-  add_nsfd_test(comp.fg.test src/nsfd/comp/fg.test.cpp)
-  add_nsfd_test(comp.time_step.test src/nsfd/comp/time_step.test.cpp)
-  add_nsfd_test(config.test src/nsfd/config.test.cpp)
-  add_nsfd_test(field.scalar.test src/nsfd/field/scalar.test.cpp)
-  add_nsfd_test(field.vector.test src/nsfd/field/vector.test.cpp)
-  add_nsfd_test(geometry.test src/nsfd/geometry.test.cpp)
-  add_nsfd_test(grid.staggered_grid.test src/nsfd/grid/staggered_grid.test.cpp)
-  add_nsfd_test(iterpressure.test src/nsfd/iterpressure.test.cpp)
-  add_nsfd_test(ops.gradient.test src/nsfd/ops/gradient.test.cpp)
-  add_nsfd_test(ops.laplace.test src/nsfd/ops/laplace.test.cpp)
-  add_nsfd_test(scalar.test src/nsfd/scalar.test.cpp)
-  add_nsfd_test(vector.test src/nsfd/vector.test.cpp)
 endif()
 
 if(nsfd_BUILD_EXAMPLES)
