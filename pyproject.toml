@@ -8,7 +8,7 @@ version = "0.0.1"
 readme = "README.md"
 authors = [{ name = "Marian Domanski", email = "shrieks.walnut.0s@icloud.com" }]
 license.file = "LICENSE"
-dependencies = ["matplotlib", "numpy"]
+dependencies = ["matplotlib", "numpy", "PyYAML"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Science/Research",

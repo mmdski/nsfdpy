@@ -10,8 +10,6 @@ add_subdirectory(external/pybind11)
 
 add_subdirectory(external/nsfd)
 
-set(PYBIND11_NEWPYTHON ON)
-find_package(pybind11 CONFIG REQUIRED)
 pybind11_add_module(_nsfd
     src/nsfdpy/_nsfd.cpp
     src/nsfdpy/bind_config.cpp
