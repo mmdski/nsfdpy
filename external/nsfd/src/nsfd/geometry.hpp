@@ -36,7 +36,7 @@ class Geometry {
         cells_((grid.imax() + 2) * (grid.jmax() + 2)),
         boundary_{},
         fluid_{} {
-    for (const auto [i, j] : obstacle) {
+    for (const auto &[i, j] : obstacle) {
       operator()(i, j).type = Cell::Type::Obstacle;
     }
 
