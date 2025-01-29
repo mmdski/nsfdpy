@@ -37,7 +37,8 @@ if(nsfd_BUILD_TESTS)
 endif()
 
 set(NSFD_SRCS
-  src/ns_field_vec.c
+  src/nsfd.c
+  src/ns_s_field.c
 )
 add_library(nsfd ${NSFD_SRCS})
 add_library(nsfd::nsfd ALIAS nsfd)
@@ -52,6 +53,14 @@ target_sources(nsfd
 )
 
 if(nsfd_BUILD_TESTS)
+  macro(add_nsfd_test test_name source_file)
+    add_executable(${test_name} ${source_file})
+    target_link_libraries(${test_name} nsfd::nsfd GTest::gtest_main)
+    gtest_add_tests(TARGET ${test_name} TEST_LIST ${test_name}.test-list)
+    set_tests_properties(${${test_name}.test-list} PROPERTIES ENVIRONMENT "${TEST_ENV}")
+  endmacro()
+
+  add_nsfd_test(nsfd_s_field.test src/ns_s_field.test.cpp)
 endif()
 
 if(nsfd_BUILD_EXAMPLES)
