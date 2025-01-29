@@ -22,7 +22,8 @@ _nsfd_lib = CDLL(_nsfd_lib_path)
 
 ns_real_size = _nsfd_lib.ns_real_size
 ns_real_size.restype = c_size_t
-ns_real_size.argtypes = None
+
+Real: type[c_double] | type[c_float]
 
 if ns_real_size() == sizeof(c_double):
     Real = c_double

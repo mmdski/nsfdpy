@@ -1,14 +1,14 @@
-from ctypes import cast, pythonapi
+from ctypes import cast
 
-from nsfdpy import nsfd
+from nsfdpy import nsfd, pymem
 
 
-grid_shape = nsfd.GridShape(10, 15)
-s_field_size = nsfd.s_field_size(grid_shape)
-s_field_ptr = cast(pythonapi.PyMem_Malloc(s_field_size), nsfd.ScalarFieldPtr)
-if not s_field_ptr:
+shape = nsfd.DomainShape(10, 15)
+s_field_size = nsfd.s_field_size(shape)
+s_field_ptr = cast(pymem.malloc(s_field_size), nsfd.ScalarFieldPtr)
+if s_field_ptr is None:
     raise MemoryError
-s_field_ptr = nsfd.s_field_init(grid_shape, s_field_ptr, nsfd.Real(0))
+s_field_ptr = nsfd.s_field_init(shape, s_field_ptr, nsfd.Real(0))
 
-# pythonapi.PyMem_Free(s_field_ptr)
-# s_field_ptr = None
+pymem.free(s_field_ptr)
+s_field_ptr = None
