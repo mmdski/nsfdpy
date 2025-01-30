@@ -84,8 +84,9 @@
     "ylength",
     "ylim",
     "zorder"
-],
+  ],
   "notebook.lineNumbers": "on",
   "esbonio.sphinx.confDir": "${workspaceFolder}/docs",
-  "python.terminal.activateEnvInCurrentTerminal": true
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "iis.configDir": ""
 }
