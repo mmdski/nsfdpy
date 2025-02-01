@@ -13,8 +13,8 @@ size_t ns_s_field_mem_size(NSDomainShape shape) {
 }
 
 NSSField *ns_s_field_init(NSDomainShape shape, NSSField *sfp, real init_val) {
-  if (shape.imax == 0 || shape.jmax == 0) return NULL;
-  if (!sfp) return NULL;
+  if (shape.imax == 0 || shape.jmax == 0) return sfp;
+  if (!sfp) return sfp;
   sfp->shape = shape;
   sfp->size = calc_grid_size(sfp->shape);
   for (size_t i = 0; i < sfp->size; ++i) {

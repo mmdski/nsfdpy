@@ -1,14 +1,14 @@
-#ifndef NS_S_FIELD_H_
-#define NS_S_FIELD_H_
+#ifndef NS_V_FIELD_H_
+#define NS_V_FIELD_H_
 
 #include <stddef.h>
 
 #include <nsfd.h>
 
-struct NSSField {
+struct NSVField {
   size_t size;
   NSDomainShape shape;
-  real field[];
+  NSVector field[];
 };
 
 #endif

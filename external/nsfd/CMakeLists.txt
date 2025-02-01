@@ -4,7 +4,7 @@ project(nsfd LANGUAGES C CXX)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(nsfd_BUILD_TESTS "Build tests" NO)
@@ -39,6 +39,7 @@ endif()
 set(NSFD_SRCS
   src/nsfd.c
   src/ns_s_field.c
+  src/ns_v_field.c
 )
 add_library(nsfd ${NSFD_SRCS})
 add_library(nsfd::nsfd ALIAS nsfd)
@@ -61,6 +62,7 @@ if(nsfd_BUILD_TESTS)
   endmacro()
 
   add_nsfd_test(nsfd_s_field.test src/ns_s_field.test.cpp)
+  add_nsfd_test(nsfd_v_field.test src/ns_v_field.test.cpp)
 endif()
 
 if(nsfd_BUILD_EXAMPLES)

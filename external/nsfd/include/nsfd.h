@@ -35,4 +35,16 @@ real *ns_s_field_get(NSSField *sfp, size_t i, size_t j);
 void ns_s_field_set(NSSField *sfp, size_t i, size_t j, real value);
 void ns_s_field_values(NSSField *sfp, real *values);
 
+// vector field
+typedef struct NSVField NSVField;
+
+size_t ns_v_field_mem_size(NSDomainShape shape);
+NSVField *ns_v_field_init(NSDomainShape shape, NSVField *vfp,
+                          NSVector init_val);
+NSDomainShape ns_v_field_shape(NSVField *vfp);
+NSGridShape ns_v_field_grid_shape(NSVField *vfp);
+NSVector *ns_v_field_get(NSVField *vfp, size_t i, size_t j);
+void ns_v_field_set(NSVField *vfp, size_t i, size_t j, real x, real y);
+void ns_v_field_values(NSVField *vfp, real *x_values, real *y_values);
+
 #endif

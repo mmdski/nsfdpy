@@ -35,6 +35,13 @@ else:
 RealPtr = POINTER(Real)
 
 
+class Vector(Structure):
+    _fields_ = [("x", Real), ("y", Real)]
+
+
+VectorPtr = POINTER(Vector)
+
+
 class DomainShape(Structure):
     _fields_ = [("imax", c_size_t), ("jmax", c_size_t)]
 
@@ -77,3 +84,41 @@ s_field_set.restype = None
 s_field_values = _nsfd_lib.ns_s_field_values
 s_field_values.argtypes = [ScalarFieldPtr, RealPtr]
 s_field_values.restype = None
+
+# vector field
+
+
+class VectorField(Structure):
+    pass
+
+
+VectorFieldPtr = POINTER(VectorField)
+
+
+v_field_size = _nsfd_lib.ns_v_field_mem_size
+v_field_size.argtypes = [DomainShape]
+v_field_size.restype = c_size_t
+
+v_field_init = _nsfd_lib.ns_v_field_init
+v_field_init.argtypes = [DomainShape, VectorFieldPtr, Vector]
+v_field_init.restype = VectorFieldPtr
+
+v_field_shape = _nsfd_lib.ns_v_field_shape
+v_field_shape.argtypes = [VectorFieldPtr]
+v_field_shape.restype = DomainShape
+
+v_field_grid_shape = _nsfd_lib.ns_v_field_grid_shape
+v_field_grid_shape.argtypes = [VectorFieldPtr]
+v_field_grid_shape.restype = GridShape
+
+v_field_get = _nsfd_lib.ns_v_field_get
+v_field_get.argtypes = [VectorFieldPtr, c_size_t, c_size_t]
+v_field_get.restype = VectorPtr
+
+v_field_set = _nsfd_lib.ns_v_field_set
+v_field_set.argtypes = [VectorFieldPtr, c_size_t, c_size_t, Real, Real]
+v_field_set.restype = None
+
+v_field_values = _nsfd_lib.ns_v_field_values
+v_field_values.argtypes = [VectorFieldPtr, RealPtr, RealPtr]
+v_field_values.restype = None

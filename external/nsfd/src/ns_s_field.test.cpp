@@ -14,7 +14,7 @@ TEST(ns_s_field, init) {
     std::free(sfp);  // keep the linter from complaining
     ASSERT_TRUE(sfp);
   }
-  double init_val = 0;
+  real init_val = 0;
   sfp = ns_s_field_init(shape, sfp, init_val);
   if (!sfp) {
     std::free(sfp);
